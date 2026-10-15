@@ -1,0 +1,95 @@
+//prisma schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum Role {
+    user
+    tutor
+    admin
+}
+
+enum Status {
+    pending
+    approved
+    rejected
+}
+
+model User {
+    id String @id @default(uuid())
+    email String @unique
+    name String 
+    age Int?
+    phone String?
+    role Role @default(user)
+    address String?
+    password String
+    isAdmin Boolean @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    tutor Tutor_profile?
+    tutorPosts Tutor_post[]
+    Applications Application[]
+}
+
+model Tutor_profile {
+    id String @id @default(uuid())
+    userId String @unique
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    imagebg String?
+    description String?
+    avatar String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    evaluations Evaluation[]
+}
+
+
+model Tutor_post {
+    id String @id @default(uuid())
+    subject String
+    description String
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    time DateTime
+    status Status @default(pending)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    evaluations Evaluation[]
+}
+
+model Application {
+    id String @id @default(uuid())
+    name String
+    email String 
+    class String
+    userId String
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    status Status @default(pending)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+}
+
+model Evaluation {
+    id String @id @default(uuid())
+    tutorId String
+    tutor Tutor_profile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+    rating Int
+    comment String
+    tutor_postId String
+    tutor_post Tutor_post @relation(fields: [tutor_postId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+}
+

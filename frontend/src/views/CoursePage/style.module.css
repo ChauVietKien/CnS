@@ -1,0 +1,10 @@
+.maindiv {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    min-height: 300px;
+    min-width: 500px;
+    overflow-y: auto;
+    margin: 10px 0 0 10px;
+    align-items: center;
+}

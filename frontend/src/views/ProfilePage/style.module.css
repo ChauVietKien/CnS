@@ -1,0 +1,33 @@
+.mainbl {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    width: 80vh;
+    justify-content: center;
+    margin: auto;
+    margin-top: 5vh;
+    background-color:  rgba(112, 147, 159, 0.8);
+    border-radius: 10px;
+    gap: 15px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    margin: 0 2rem 0 2rem;
+    padding: 5px;
+}
+
+.button {
+    display: flex;;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 15px;
+}

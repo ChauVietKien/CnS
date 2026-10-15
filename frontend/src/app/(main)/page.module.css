@@ -1,0 +1,35 @@
+.main {
+    min-height: 490px;
+    max-height: 1000px;
+}
+
+.research {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    margin: 15px auto;
+    gap: 35px;
+    transform: scale(1.1);
+}
+
+.search:hover {
+    display: flex;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transform: translateY(1px) scale(1);
+}
+
+.filter:hover {
+    display: flex;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border-radius: 12px;   
+    transform: translateX(-2px) scale(1.1);
+}
+
+.card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* gap: 5px;      */
+    padding: 20px;
+    row-gap: 15px;
+}

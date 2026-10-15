@@ -1,0 +1,42 @@
+.maindiv {
+    display: flex;
+    flex-direction: column; 
+    min-height: 200px;
+    min-width: 250px;
+    width: 500px;
+    gap: 10px;
+}
+
+.eachdiv {
+    background-color: rgb(8, 115, 132);
+    border-radius: 12px;
+    margin-left: 30px;
+    padding: 10px;
+}
+
+.head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(117, 117, 184);
+}
+
+.mid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.undermid {
+
+}
+
+.tail {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}

@@ -1,0 +1,31 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 150vh;
+    background-color: blanchedalmond;
+}
+
+.title {
+    display: flex;
+    height: 10vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 25px;
+    justify-content: center;
+    align-items: center;
+    max-height: 140vh;
+    gap: 10px;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
