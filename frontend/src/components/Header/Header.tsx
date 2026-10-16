@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import style from './Header.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Archive, CircleUser } from 'lucide-react';
+import { Archive, CircleUser, FolderKanban  } from 'lucide-react';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -137,7 +137,7 @@ const Header = () => {
                 </NavigationMenuList>
             </NavigationMenu>
             <div className={style.userAction}>
-                <div className={style.actionItem} onClick={handleSelectCourse}><Archive />Courses</div>
+                <div className={style.actionItem} onClick={handleSelectCourse}><Archive />Khóa học</div>
                 <DropdownMenu open={isOpen}>
                     <DropdownMenuTrigger>
                     <div 
@@ -159,15 +159,19 @@ const Header = () => {
                         <DropdownMenuGroup>
                         <DropdownMenuItem onClick={handleProfile}>
                             <BadgeCheckIcon />
-                            Account
+                            Thông tin
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <FolderKanban />
+                            Quản lí khóa học
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <CreditCardIcon />
-                            Billing
+                            Quản lí tài chính
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <BellIcon />
-                            Notifications
+                            Thông báo
                         </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
@@ -175,7 +179,7 @@ const Header = () => {
                             onClick={() => logoutMutation.mutate()}
                             disabled={logoutMutation.isPending}>
                         <LogOutIcon />
-                        {logoutMutation?.isPending ? "Đang đăng xuất..." : "Sign-out"}
+                        {logoutMutation?.isPending ? "Đang đăng xuất..." : "Đăng xuất"}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
