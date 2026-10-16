@@ -41,16 +41,16 @@ const SeeMorePage = () => {
         </div>
         <div className={style.intro}>
             <div className={style.info}>
-                <h1 className='text-3xl font-bold mb-5 border-b-2 border-black'>*Môn học: {cartList.title}</h1>
-                <h3 className='text-xl font-medium mb-2'>*Gia sư: Võ Đình Nam</h3>
-                <h3 className='text-xl font-medium mb-2'>*Mô tả: {cartList.description}</h3>
-                <h5>*Exp: Dạy cấp 2, 3, university</h5>
+                <h1 className='text-3xl font-bold mb-5 border-b-2 border-black'>Môn học: {cartList.title}</h1>
+                <h3 className='text-xl font-medium mb-2'>Gia sư: Võ Đình Nam</h3>
+                <h3 className='text-xl font-medium mb-2'>Mô tả: {cartList.description}</h3>
+                <h5>Exp: Dạy cấp 2, 3, university</h5>
                 <p>
-                    *Bang cap: Huy chuong vang olympic Toan, giai nhat thi hsg cap quoc gia, va tinh. Vong nguyet que cuoc thi nam duong len dinh olympia!<br/>
-                    *Danh hieu: 12 nam hoc sinh gioi va hoc truong chuyen quoc hoc hue!
+                    Bang cap: Huy chuong vang olympic Toan, giai nhat thi hsg cap quoc gia, va tinh. Vong nguyet que cuoc thi nam duong len dinh olympia!<br/>
+                    Danh hieu: 12 nam hoc sinh gioi va hoc truong chuyen quoc hoc hue!
                 </p>
                 <p>
-                    *Thành tựu về học tập của học sinh (Kết quả rõ ràng nhất):<br/>
+                    Thành tựu về học tập của học sinh (Kết quả rõ ràng nhất):<br/>
                     -Giúp học sinh mất gốc tiến bộ vượt bậc: Đưa một học sinh từ lực học yếu, <br/>
                     trung bình vươn lên đạt khá, giỏi hoặc nằm trong top đầu của lớp.<br/>
                     -Cải thiện điểm số nhanh chóng: Giúp học sinh tăng từ 2–4 điểm trong các <br/>

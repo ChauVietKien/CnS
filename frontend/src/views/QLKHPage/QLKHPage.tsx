@@ -1,4 +1,5 @@
-import React from 'react'
+"use client";
+
 import style from './QLKHPage.module.css'
 import { SquarePlus } from 'lucide-react';
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useRouter } from 'next/navigation'
 
 const invoices = [
   {
@@ -73,11 +75,18 @@ const invoices = [
 ]
 
 const QLKHPage = () => {
+
+  const router = useRouter();
+  
+  const handleUpdatePost = () => {
+      router.push('/updatepost');
+  }
+
   return (
     <div className={style.main}>
       <div className={style.dk}>
         <h1 className='font-medium text-2xl'>Đăng khóa học</h1>
-        <Button>
+        <Button onClick={handleUpdatePost}>
             <SquarePlus />
         </Button>
       </div>

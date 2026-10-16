@@ -64,6 +64,10 @@ const Header = () => {
         router.push('/profile');
     }
 
+    const handleManage = () => {
+        router.push('/qlkh');
+    }
+
     const logoutMutation = useMutation({
         mutationFn: () => UserService.logoutUser(),
         onSuccess: () => {
@@ -161,10 +165,11 @@ const Header = () => {
                             <BadgeCheckIcon />
                             Thông tin
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        {currentUser?.role === "admin" ? 
+                        <DropdownMenuItem onClick={handleManage}>
                             <FolderKanban />
                             Quản lí khóa học
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> : ""}
                         <DropdownMenuItem>
                             <CreditCardIcon />
                             Quản lí tài chính

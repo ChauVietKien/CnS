@@ -55,10 +55,17 @@ model Tutor_profile {
 model Tutor_post {
     id String @id @default(uuid())
     subject String
+    class String
     description String
+    method String
     userId String
+    tutorname String
+    field String
+    proof String
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    time DateTime
+    dayOfWeek Int
+    startTime String
+    endTime   String
     status Status @default(pending)
 
     createdAt DateTime @default(now())
