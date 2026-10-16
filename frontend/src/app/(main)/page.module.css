@@ -1,6 +1,7 @@
 .main {
-    min-height: 490px;
-    max-height: 1000px;
+    /* Cho phép content phát triển tự nhiên, không cố định height */
+    flex: 1;
+    min-height: 0;
 }
 
 .research {

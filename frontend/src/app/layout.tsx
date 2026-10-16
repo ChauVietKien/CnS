@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="vi"
       className={cn("h-full", "antialiased", inter.variable, "font-sans", geist.variable)}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className={cn("antialiased", inter.variable, geist.variable)}>
         <TanstackProvider>
           <UserProvider>
             <main className="flex-1">{children}</main>

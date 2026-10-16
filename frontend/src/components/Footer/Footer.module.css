@@ -1,26 +1,29 @@
 .footerContainer {
-    display: grid;
-    grid-template-columns: 400px 1fr;
+    display: flex;
+    align-items: center;
     height: 150px;
     background-color: rgb(173, 173, 180);
+    padding: 0 4rem;
+    gap: 2rem;
 }
 
 .footerLogo {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: auto;
     position: relative;
-    width: 350px;
-    height: auto;
-    margin-left: 4rem;
+    /* Dùng rem thay vì px cứng → nhất quán mọi máy */
+    width: 22rem;
+    flex-shrink: 0;
+    height: 100%;
 }
 
 .contactInfo {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    padding: auto;
+    flex: 1;
+    gap: 2rem;
 }
 
 .contact {
@@ -28,13 +31,11 @@
     flex-direction: column;
     font-size: 0.9rem;
     flex: 1;
-    margin-left: 130px;
 }
 
 .link {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex: 1;
-    margin-left: 200px;
+    flex-shrink: 0;
 }

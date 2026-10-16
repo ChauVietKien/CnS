@@ -128,10 +128,19 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
+    /* Lock 1rem = 16px bất kể browser/OS setting của từng máy */
+    font-size: 16px;
+    /* Đảm bảo html chiếm toàn bộ chiều cao viewport */
+    height: 100%;
     @apply font-sans;
+  }
+  body {
+    /* min-h-screen đảm bảo body luôn chiếm ít nhất 100vh */
+    min-height: 100vh;
+    /* flex-col để footer luôn bị đẩy xuống đáy */
+    display: flex;
+    flex-direction: column;
+    @apply bg-background text-foreground;
   }
 }
