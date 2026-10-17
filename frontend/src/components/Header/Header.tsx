@@ -165,7 +165,7 @@ const Header = () => {
                             <BadgeCheckIcon />
                             Thông tin
                         </DropdownMenuItem>
-                        {currentUser?.role === "admin" ? 
+                        {currentUser?.role === "tutor" || "admin" ? 
                         <DropdownMenuItem onClick={handleManage}>
                             <FolderKanban />
                             Quản lí khóa học

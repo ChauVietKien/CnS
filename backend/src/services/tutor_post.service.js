@@ -2,49 +2,81 @@ const prisma = require("../config/prisma")
 
 const createPost = async (newPost) => {
     try {
-        const { subject, description, userId, time } = newPost;
+        const { userId, subject, Class, description, method, tutorname, field, proof, schedules } = newPost;
 
-        if (!userId || !subject || !description || !time) {
+        if (!userId || !subject || !Class || !description || !method || !tutorname || !field || !proof) {
             return {
                 status: "ERR",
-                message: "Thieu thong tin bat buoc (subject, description, time)!",
-            }
+                message: "Thieu thong tin bat buoc!",
+            };
         }
-
-        // Kiem tra user co phai tutor khong bang cach tim trong bang User
+        // 2. Parse schedules TRƯỚC KHI kiểm tra Array
+        let parsedSchedules = [];
+        try {
+            parsedSchedules = typeof schedules === 'string' ? JSON.parse(schedules) : schedules;
+        } catch (e) {
+            return {
+                status: "ERR",
+                message: "Lich hoc khong dung dinh dang JSON!",
+            };
+        }
+        
+        // 3. Kiểm tra mảng schedules sau khi đã parse
+        if (!Array.isArray(parsedSchedules) || parsedSchedules.length === 0) {
+            return {
+                status: "ERR",
+                message: "Can it nhat 1 lich hoc!",
+            };
+        }
+        
+        // Kiem tra user co phai tutor khong
         const user = await prisma.user.findUnique({
             where: { id: userId },
         });
-
+        
         if (!user || user.role !== "tutor") {
             return {
                 status: "ERR",
                 message: "Chi khi la gia su moi dang bai duoc!",
-            }
+            };
         }
 
         const createdPost = await prisma.tutor_post.create({
             data: {
-                subject: subject,
-                description: description,
-                userId: userId,
-                time: new Date(time),
-            }
-        })
+                subject,
+                Class,
+                description,
+                method,
+                userId,
+                tutorname,
+                field,
+                proof,
+                schedules: {
+                    create: parsedSchedules.map(s => ({
+                        day: s.day,
+                        startTime: s.startTime,
+                        endTime: s.endTime,
+                    })),
+                },
+            },
+            include: {
+                schedules: true,
+            },
+        });
 
         return {
             status: "OK",
             message: "Create post success!",
             data: createdPost,
-        }
+        };
     } catch (err) {
         console.log("Create post failed!", err);
         return {
             status: "ERR",
             message: "Internal Server Error"
-        }
+        };
     }
-}
+};
 
 const getPost = async (id) => {
     try {
@@ -57,6 +89,14 @@ const getPost = async (id) => {
                         name: true,
                         email: true,
                         phone: true,
+                    }
+                },
+                schedules: {
+                    select: {
+                        id: true,
+                        day: true,
+                        startTime: true,
+                        endTime: true,
                     }
                 },
                 evaluations: {
@@ -89,14 +129,23 @@ const getAllPosts = async (status) => {
     try {
         const whereClause = status ? { status: status } : {};
         const posts = await prisma.tutor_post.findMany({
-            where: {whereClause},
+            where: whereClause,
             include: {
-                user : {
-                    id: true,
-                    name: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                schedules: {
+                    select: {
+                        day: true,
+                        startTime: true,
+                        endTime: true,
+                    },
                 },
             },
-            orderBy: { createdAt: desc },
+            orderBy: { createdAt: "desc" },
         });
 
         return {
@@ -114,6 +163,15 @@ const getPostsByUser = async (userId) => {
     try {
         const posts = await prisma.tutor_post.findMany({
             where: { userId: userId },
+            include: {
+                schedules: {
+                    select: {
+                        day: true,
+                        startTime: true,
+                        endTime: true,
+                    },
+                },
+            },
             orderBy: { createdAt: "desc" },
         });
 
@@ -142,13 +200,36 @@ const updatePost = async (id, userId, data) => {
             return { status: "ERR", message: "Khong co quyen chinh sua bai dang nay!" }
         }
 
+        const { schedules, ...postData } = data;
+
+        // Build update data, chi update cac field duoc gui len
+        const updateData = {};
+        if (postData.subject !== undefined) updateData.subject = postData.subject;
+        if (postData.Class !== undefined) updateData.Class = postData.Class;
+        if (postData.description !== undefined) updateData.description = postData.description;
+        if (postData.method !== undefined) updateData.method = postData.method;
+        if (postData.tutorname !== undefined) updateData.tutorname = postData.tutorname;
+        if (postData.field !== undefined) updateData.field = postData.field;
+        if (postData.proof !== undefined) updateData.proof = postData.proof;
+
+        // Neu co schedules moi, xoa het cu va tao lai
+        if (schedules && Array.isArray(schedules) && schedules.length > 0) {
+            updateData.schedules = {
+                deleteMany: {},
+                create: schedules.map(s => ({
+                    day: s.day,
+                    startTime: s.startTime,
+                    endTime: s.endTime,
+                })),
+            };
+        }
+
         const updatedPost = await prisma.tutor_post.update({
             where: { id },
-            data: {
-                subject: data.subject,
-                description: data.description,
-                time: data.time ? new Date(data.time) : undefined,
-            }
+            data: updateData,
+            include: {
+                schedules: true,
+            },
         });
 
         return {
@@ -176,6 +257,7 @@ const deletePost = async (id, userId, isAdmin) => {
             return { status: "ERR", message: "Khong co quyen xoa bai dang nay!" }
         }
 
+        // Schedule se tu dong bi xoa nho onDelete: Cascade
         await prisma.tutor_post.delete({
             where: { id },
         });

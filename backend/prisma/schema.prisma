@@ -55,7 +55,7 @@ model Tutor_profile {
 model Tutor_post {
     id String @id @default(uuid())
     subject String
-    class String
+    Class String
     description String
     method String
     userId String
@@ -63,14 +63,12 @@ model Tutor_post {
     field String
     proof String
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    dayOfWeek Int
-    startTime String
-    endTime   String
     status Status @default(pending)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    schedules Schedule[]
     evaluations Evaluation[]
 }
 
@@ -100,3 +98,11 @@ model Evaluation {
 
 }
 
+model Schedule {
+    id        String     @id @default(uuid())
+    day       String
+    startTime String
+    endTime   String
+    postId    String
+    post      Tutor_post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}

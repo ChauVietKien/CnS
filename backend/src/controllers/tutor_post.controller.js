@@ -3,10 +3,9 @@ const TutorPostService = require("../services/tutor_post.service.js");
 const createPost = async (req, res) => {
     try {
         const userId = req.user.id; // tu token
-        const { subject, description, time } = req.body;
-
+        const { subject, Class, description, method, tutorname, field, proof, schedules } = req.body;
         const response = await TutorPostService.createPost({
-            userId, subject, description, time
+            userId, subject, Class, description, method, tutorname, field, proof, schedules
         });
         
         if (response.status === "ERR") return res.status(400).json(response);
