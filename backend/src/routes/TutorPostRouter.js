@@ -5,7 +5,7 @@ const { authAdminMiddleware, authMiddlewareOnlyToken } = require("../middleware/
 const multer = require('multer');
 const upload = multer(); 
 
-router.post('/create', authMiddlewareOnlyToken, upload.any(), TutorPostController.createPost);
+router.post('/create', authMiddlewareOnlyToken, upload.array('files'), TutorPostController.createPost);
 router.get('/get-post/:id', TutorPostController.getPost);
 router.get('/get-all-posts', TutorPostController.getAllPosts);
 router.get('/get-posts-by-user/:userId', TutorPostController.getPostsByUser);

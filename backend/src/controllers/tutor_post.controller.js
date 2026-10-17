@@ -1,11 +1,18 @@
 const TutorPostService = require("../services/tutor_post.service.js");
+const uploadToCloudinary = require('../utils/uploadToCloudinary');
 
 const createPost = async (req, res) => {
     try {
+        let proofUrl = req.body.proof || '';
+
+        if (req.files && req.files.length > 0) {
+            proofUrl = await uploadToCloudinary(req.files[0].buffer, 'home/cns/proofs');
+        }
+
         const userId = req.user.id; // tu token
         const { subject, Class, description, method, tutorname, field, proof, schedules } = req.body;
         const response = await TutorPostService.createPost({
-            userId, subject, Class, description, method, tutorname, field, proof, schedules
+            userId, subject, Class, description, method, tutorname, field, proof: proofUrl, schedules
         });
         
         if (response.status === "ERR") return res.status(400).json(response);
