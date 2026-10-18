@@ -1,0 +1,39 @@
+/* [project]/src/views/QLKHPage/QLKHPage.module.css [app-client] (css) */
+.QLKHPage-module__vwb8SG__main {
+  background-color: #eed2db;
+  width: 100%;
+  height: 100vh;
+}
+
+.QLKHPage-module__vwb8SG__dk {
+  background-color: #7fffd4;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  min-width: 100px;
+  min-height: 19vh;
+  margin: auto;
+  padding-left: 2rem;
+  display: flex;
+}
+
+.QLKHPage-module__vwb8SG__kh {
+  background-color: #baf4e1;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  padding-top: 1rem;
+  padding-left: 2rem;
+  display: flex;
+}
+
+.QLKHPage-module__vwb8SG__table {
+  height: auto;
+  padding: 0 2rem;
+  display: flex;
+}
+
+/*# sourceMappingURL=src_views_QLKHPage_QLKHPage_module_1pz7fbx.css.map*/

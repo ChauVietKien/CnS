@@ -129,8 +129,8 @@ const UpdatePostPage = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      userId: "",
+    values: {
+      userId: userId || "",
       subject: "",
       Class: "",
       description: "",
@@ -147,6 +147,7 @@ const UpdatePostPage = () => {
       form.setValue("userId", userId);
     }
   }, [userId, form]);
+  console.log("userId", userId)
 
   // FIX 2: useFieldArray dùng đúng form context, không tạo Form lồng nhau
   const { fields, append, remove } = useFieldArray({

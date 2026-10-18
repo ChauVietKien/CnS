@@ -27,12 +27,12 @@ import style from "./Card.module.css";
 import { useRouter } from "next/navigation"
 
 export interface CardItem {
-  id: string,
-  title: string,
-  description: string,
-  image: string,
-  bagde: string,
-};
+  id: string;
+  subject?: string;
+  description?: string;
+  proofs?: string;
+  [key: string]: any;
+}
 
 export function CardImage({ data }: { data: CardItem }) {
   const router= useRouter();
@@ -41,24 +41,28 @@ export function CardImage({ data }: { data: CardItem }) {
     router.push("/seemore");
   }
 
+  const handleRegister = () => {
+    router.push(`/register/${data.id}`);
+  }
+
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
       <img
-        src={data.image}
+        src={data.proof}
         alt="postimage"
         className="relative z-20 aspect-video w-full object-cover dark:brightness-0"
       />
       <CardHeader>
         <CardAction>
-          <Badge variant="secondary">{data.bagde}</Badge>
+          {/* <Badge variant="secondary">{data.bagde}</Badge> */}
         </CardAction>
-        <CardTitle>{data.title}</CardTitle>
+        <CardTitle>{data.subject}</CardTitle>
         <CardDescription>
           {data.description}
         </CardDescription>
       </CardHeader>
       <CardFooter className={style.cardfooter}>
-        <Dialog>
+        {/* <Dialog>
           <form>
             <DialogTrigger className='bg-zinc-800 w-35' render={<Button>Dang ki</Button>} />
             <DialogContent className="sm:max-w-sm max-h-[80vh] flex flex-col">
@@ -110,8 +114,9 @@ export function CardImage({ data }: { data: CardItem }) {
               </DialogFooter>
             </DialogContent>
           </form>
-        </Dialog>
-        <Button className="w-35 bg-zinc-800" onClick={handleSeeMore}>See more</Button>
+        </Dialog> */}
+        <Button className="w-35 bg-zinc-800" onClick={handleRegister}>Đăng Kí</Button>
+        <Button className="w-35 bg-zinc-800" onClick={handleSeeMore}>Xem Thêm</Button>
       </CardFooter>
     </Card>
   )

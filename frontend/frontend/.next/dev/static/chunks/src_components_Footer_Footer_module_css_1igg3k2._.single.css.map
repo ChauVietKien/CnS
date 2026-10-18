@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/components/Footer/Footer.module.css"],"sourcesContent":[".footerContainer {\r\n    display: flex;\r\n    align-items: center;\r\n    height: 150px;\r\n    background-color: rgb(173, 173, 180);\r\n    padding: 0 4rem;\r\n    gap: 2rem;\r\n}\r\n\r\n.footerLogo {\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    position: relative;\r\n    /* Dùng rem thay vì px cứng → nhất quán mọi máy */\r\n    width: 22rem;\r\n    flex-shrink: 0;\r\n    height: 100%;\r\n}\r\n\r\n.contactInfo {\r\n    display: flex;\r\n    justify-content: space-between;\r\n    align-items: center;\r\n    flex: 1;\r\n    gap: 2rem;\r\n}\r\n\r\n.contact {\r\n    display: flex;\r\n    flex-direction: column;\r\n    font-size: 0.9rem;\r\n    flex: 1;\r\n}\r\n\r\n.link {\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 10px;\r\n    flex-shrink: 0;\r\n}"],"names":[],"mappings":"AAAA;;;;;;;;;AASA;;;;;;;;;;AAWA;;;;;;;;AAQA;;;;;;;AAOA"}}]
+}

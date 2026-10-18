@@ -125,11 +125,10 @@ const getPost = async (id) => {
     }
 }
 
-const getAllPosts = async (status) => {
+const getAllPosts = async () => {
     try {
-        const whereClause = status ? { status: status } : {};
         const posts = await prisma.tutor_post.findMany({
-            where: whereClause,
+            where: { status: 'approved'},
             include: {
                 user: {
                     select: {

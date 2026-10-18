@@ -13,9 +13,8 @@ export const getPost = async (id: string) => {
     return res.data
 }
 
-export const getAllPosts = async (status?: string) => {
-    const query = status ? `?status=${status}` : "";
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tutor-post/get-all-posts${query}`);
+export const getAllPosts = async () => {
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tutor-post/get-all-posts`);
     return res.data
 }
 

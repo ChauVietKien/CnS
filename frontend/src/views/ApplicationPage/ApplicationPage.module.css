@@ -1,0 +1,20 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    min-height: 300px;
+    padding: 1rem;
+    background-color: rgb(189, 166, 166);
+}
+
+.twodiv {
+    display: flex;
+    min-height: 200px;
+    min-width: 900px;
+    padding: 1rem;
+    border-radius: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    background-color: rgb(129, 97, 97);
+}

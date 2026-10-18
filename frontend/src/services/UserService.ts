@@ -23,7 +23,9 @@ export const updateUser = async ( id : string, data: {}) => {
 }
 
 export const getDetailUser = async ( id : string) => {
-    const res = await axiosClient.get(`${process.env.NEXT_PUBLIC_API_URL}/user/get-detail-user/${id}`);
+    const res = await axiosClient.get(`${process.env.NEXT_PUBLIC_API_URL}/user/get-detail-user/${id}`, {
+        withCredentials: true,
+    })
     return res.data
 }
 

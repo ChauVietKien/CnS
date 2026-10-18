@@ -41,8 +41,7 @@ const getPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     try {
-        const { status } = req.query; // Co the loc theo status: ?status=approved
-        const response = await TutorPostService.getAllPosts(status);
+        const response = await TutorPostService.getAllPosts();
         
         if (response.status === "ERR") return res.status(400).json(response);
         return res.status(200).json(response);

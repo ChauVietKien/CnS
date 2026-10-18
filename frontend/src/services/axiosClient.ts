@@ -11,6 +11,7 @@ let refreshPromise: Promise<string | null> | null = null;
 const getrefreshToken = async () => {
     try {
         const res = await refreshToken();
+        console.log("res", res.access_token)
         return res?.access_token;
     } catch (e) {
         return null;
