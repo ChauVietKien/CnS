@@ -10,9 +10,9 @@ const createPost = async (req, res) => {
         }
 
         const userId = req.user.id; // tu token
-        const { subject, Class, description, method, tutorname, field, proof, schedules } = req.body;
+        const { subject, Class, address, description, method, field, schedules } = req.body;
         const response = await TutorPostService.createPost({
-            userId, subject, Class, description, method, tutorname, field, proof: proofUrl, schedules
+            userId, subject, Class, address, description, method, field, proof: proofUrl, schedules
         });
         
         if (response.status === "ERR") return res.status(400).json(response);
@@ -89,7 +89,7 @@ const deletePost = async (req, res) => {
     try {
         const id = req.params.id;
         const userId = req.user.id; // tu token
-        const isAdmin = req.user.isAdmin; // tu token
+        const isAdmin = req.user.role === 'admin';
 
         if (!id) {
             return res.status(400).json({ status: "ERR", message: "Post ID is required!" });

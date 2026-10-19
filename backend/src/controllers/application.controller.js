@@ -2,12 +2,22 @@ const ApplicationService = require("../services/application.service.js");
 
 const createApplication = async (req, res) => {
     try {
-        const userId = req.user.id; // tu token
-        const { name, email, className } = req.body; 
-        // FE nen gui truong className thay vi class vi no la reserved keyword trong JS
+        const { postId, name, email, phone, className, note } = req.body; 
+
+        // Neu user da dang nhap, lay studentProfile
+        let studentId = null;
+        if (req.user && req.user.id) {
+            const prisma = require("../config/prisma.js");
+            const studentProfile = await prisma.studentProfile.findUnique({
+                where: { userId: req.user.id },
+            });
+            if (studentProfile) {
+                studentId = studentProfile.id;
+            }
+        }
 
         const response = await ApplicationService.createApplication({
-            userId, name, email, className
+            postId, studentId, name, email, phone, className, note
         });
         
         if (response.status === "ERR") return res.status(400).json(response);
@@ -47,18 +57,34 @@ const getAllApplications = async (req, res) => {
     }
 }
 
-const getApplicationsByUser = async (req, res) => {
+const getApplicationsByPost = async (req, res) => {
     try {
-        const userId = req.params.userId;
-        if (!userId) {
-            return res.status(400).json({ status: "ERR", message: "userId is required!" });
+        const postId = req.params.postId;
+        if (!postId) {
+            return res.status(400).json({ status: "ERR", message: "postId is required!" });
         }
 
-        const response = await ApplicationService.getApplicationsByUser(userId);
+        const response = await ApplicationService.getApplicationsByPost(postId);
         if (response.status === "ERR") return res.status(400).json(response);
         return res.status(200).json(response);
     } catch (err) {
-        console.log("Get Applications By User Error:", err);
+        console.log("Get Applications By Post Error:", err);
+        return res.status(500).json({ status: "ERR", message: "Internal Server Error" });
+    }
+}
+
+const getApplicationsByStudent = async (req, res) => {
+    try {
+        const studentId = req.params.studentId;
+        if (!studentId) {
+            return res.status(400).json({ status: "ERR", message: "studentId is required!" });
+        }
+
+        const response = await ApplicationService.getApplicationsByStudent(studentId);
+        if (response.status === "ERR") return res.status(400).json(response);
+        return res.status(200).json(response);
+    } catch (err) {
+        console.log("Get Applications By Student Error:", err);
         return res.status(500).json({ status: "ERR", message: "Internal Server Error" });
     }
 }
@@ -84,14 +110,12 @@ const updateApplicationStatus = async (req, res) => {
 const deleteApplication = async (req, res) => {
     try {
         const id = req.params.id;
-        const userId = req.user.id; // tu token
-        const isAdmin = req.user.isAdmin; // tu token
 
         if (!id) {
             return res.status(400).json({ status: "ERR", message: "Application ID is required!" });
         }
 
-        const response = await ApplicationService.deleteApplication(id, userId, isAdmin);
+        const response = await ApplicationService.deleteApplication(id);
         if (response.status === "ERR") return res.status(400).json(response);
         return res.status(200).json(response);
     } catch (err) {
@@ -104,7 +128,8 @@ module.exports = {
     createApplication,
     getApplication,
     getAllApplications,
-    getApplicationsByUser,
+    getApplicationsByPost,
+    getApplicationsByStudent,
     updateApplicationStatus,
     deleteApplication,
 }

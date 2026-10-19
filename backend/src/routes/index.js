@@ -3,6 +3,8 @@ const TutorPostRouter = require("./TutorPostRouter");
 const TutorProfileRouter = require("./TutorProfileRouter");
 const ApplicationRouter = require("./ApplicationRouter");
 const EvaluationRouter = require("./EvaluationRouter");
+const StudentProfileRouter = require("./StudentProfileRouter");
+const AdminProfileRouter = require("./AdminProfileRouter");
 
 const routes = (app) => {
     app.use('/api/user', UserRouter);
@@ -10,6 +12,8 @@ const routes = (app) => {
     app.use('/api/tutor-profile', TutorProfileRouter);
     app.use('/api/application', ApplicationRouter);
     app.use('/api/evaluation', EvaluationRouter);
+    app.use('/api/student-profile', StudentProfileRouter);
+    app.use('/api/admin-profile', AdminProfileRouter);
 }
 
 module.exports = routes

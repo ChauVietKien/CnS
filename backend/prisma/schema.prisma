@@ -10,6 +10,7 @@ datasource db {
 
 enum Role {
     user
+    student
     tutor
     admin
 }
@@ -21,88 +22,109 @@ enum Status {
 }
 
 model User {
-    id String @id @default(uuid())
-    email String @unique
-    name String 
-    age Int?
-    phone String?
-    role Role @default(user)
-    address String?
-    password String
-    isAdmin Boolean @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(student)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    tutor Tutor_profile?
-    tutorPosts Tutor_post[]
-    Applications Application[]
+  // Quan hệ 1-1 phân rã thông tin chi tiết cho từng loại tài khoản
+  adminProfile   AdminProfile?
+  tutorProfile   Tutor_profile?
+  studentProfile StudentProfile?
+}
+
+model AdminProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentProfile {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  phone       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  applications Application[]
 }
 
 model Tutor_profile {
-    id String @id @default(uuid())
-    userId String @unique
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    imagebg String?
-    description String?
-    avatar String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  phone       String?
+  avatar      String?
+  imagebg     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-    evaluations Evaluation[]
+  posts       Tutor_post[]
+  evaluations Evaluation[]
 }
 
-
 model Tutor_post {
-    id String @id @default(uuid())
-    subject String
-    Class String
-    description String
-    method String
-    userId String
-    tutorname String
-    field String
-    proof String
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    status Status @default(pending)
+  id          String       @id @default(uuid())
+  subject     String
+  Class       String
+  description String
+  method      String
+  address     String?
+  field       String
+  proof       String
+  tutorId     String
+  tutor       Tutor_profile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  status      Status       @default(pending)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    schedules Schedule[]
-    evaluations Evaluation[]
+  schedules    Schedule[]
+  evaluations  Evaluation[]
+  applications Application[]
 }
 
 model Application {
-    id String @id @default(uuid())
-    name String
-    email String 
-    class String
-    userId String
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    status Status @default(pending)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
+  id        String          @id @default(uuid())
+  name      String          
+  email     String
+  phone     String
+  class     String
+  note      String?
+  postId    String
+  post      Tutor_post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  studentId String?        
+  student   StudentProfile? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  status    Status          @default(pending)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 }
 
 model Evaluation {
-    id String @id @default(uuid())
-    tutorId String
-    tutor Tutor_profile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-    rating Int
-    comment String
-    tutor_postId String
-    tutor_post Tutor_post @relation(fields: [tutor_postId], references: [id], onDelete: Cascade)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
+  id           String       @id @default(uuid())
+  tutorId      String
+  tutor        Tutor_profile @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  tutor_postId String
+  tutor_post   Tutor_post   @relation(fields: [tutor_postId], references: [id], onDelete: Cascade)
+  rating       Int
+  comment      String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model Schedule {
-    id        String     @id @default(uuid())
-    day       String
-    startTime String
-    endTime   String
-    postId    String
-    post      Tutor_post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  id        String     @id @default(uuid())
+  day       String
+  startTime String
+  endTime   String
+  postId    String
+  post      Tutor_post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }

@@ -18,7 +18,7 @@ const authAdminMiddleware = (req, res, next) => {
                 message: "Token invalid",
             })
         }
-        if (!user?.isAdmin) {
+        if (user?.role !== 'admin') {
             return res.status(403).json({
                 status: "ERR",
                 message: "Not allow excute this action",
@@ -46,7 +46,7 @@ const authUserMiddleware = (req, res, next) => {
                 message: "Authentication error",
             })
         }    
-        if (!userId || user?.isAdmin || user?.id===userId) {
+        if (!userId || user?.role === 'admin' || user?.id===userId) {
             req.user = user;
             return next();
         }

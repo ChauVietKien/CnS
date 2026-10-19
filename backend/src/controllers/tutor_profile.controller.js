@@ -3,10 +3,10 @@ const TutorProfileService = require("../services/tutor_profille.service.js")
 const createTutor = async (req, res) => {
     try {
         const userId = req.user.id;
-        const { imagebg, description, avatar } = req.body;
+        const { name, phone, imagebg, description, avatar } = req.body;
 
         const response = await TutorProfileService.createTutor({
-            userId, imagebg, description, avatar
+            userId, name, phone, imagebg, description, avatar
         });
         if (response.status === "ERR") return res.status(400).json(response);
 

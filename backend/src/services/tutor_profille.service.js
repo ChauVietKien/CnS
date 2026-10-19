@@ -2,7 +2,7 @@ const prisma = require("../config/prisma")
 
 const createTutor = async (newItem) => {
     try {
-        const { userId, imagebg, description, avatar } = newItem;
+        const { userId, name, phone, imagebg, description, avatar } = newItem;
 
         if (!userId) {
             return {
@@ -33,11 +33,20 @@ const createTutor = async (newItem) => {
             }
         }
 
+        if (!name) {
+            return {
+                status: "ERR",
+                message: "Name la bat buoc!",
+            }
+        }
+
         // Transaction: tao profile + cap nhat role thanh tutor
         const [created_tutor] = await prisma.$transaction([
             prisma.tutor_profile.create({
                 data: {
                     userId: userId,
+                    name: name,
+                    phone: phone,
                     imagebg: imagebg,
                     description: description,
                     avatar: avatar,
@@ -71,10 +80,7 @@ const getTutorProfile = async (userId) => {
                 user: {
                     select: {
                         id: true,
-                        name: true,
                         email: true,
-                        phone: true,
-                        address: true,
                     }
                 },
                 evaluations: {
@@ -126,9 +132,7 @@ const getAllTutors = async () => {
                 user: {
                     select: {
                         id: true,
-                        name: true,
                         email: true,
-                        phone: true,
                     }
                 },
                 evaluations: {
@@ -179,13 +183,16 @@ const updateTutorProfile = async (userId, data) => {
             }
         }
 
+        const updateData = {};
+        if (data.name !== undefined) updateData.name = data.name;
+        if (data.phone !== undefined) updateData.phone = data.phone;
+        if (data.imagebg !== undefined) updateData.imagebg = data.imagebg;
+        if (data.description !== undefined) updateData.description = data.description;
+        if (data.avatar !== undefined) updateData.avatar = data.avatar;
+
         const updatedProfile = await prisma.tutor_profile.update({
             where: { userId: userId },
-            data: {
-                imagebg: data.imagebg,
-                description: data.description,
-                avatar: data.avatar,
-            }
+            data: updateData,
         });
 
         return {
@@ -215,14 +222,14 @@ const deleteTutorProfile = async (userId) => {
             }
         }
 
-        // Transaction: xoa profile + doi role ve user
+        // Transaction: xoa profile + doi role ve student
         await prisma.$transaction([
             prisma.tutor_profile.delete({
                 where: { userId: userId },
             }),
             prisma.user.update({
                 where: { id: userId },
-                data: { role: "user" },
+                data: { role: "student" },
             })
         ]);
 

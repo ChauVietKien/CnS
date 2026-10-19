@@ -2,29 +2,33 @@ const prisma = require("../config/prisma")
 
 const createApplication = async (newApplication) => {
     try {
-        const { name, email, className, userId } = newApplication;
+        const { postId, studentId, name, email, phone, className, note } = newApplication;
 
-        if (!name || !email || !className || !userId) {
+        if (!postId || !name || !email || !phone || !className) {
             return {
                 status: "ERR",
-                message: "Thieu thong tin bat buoc (name, email, class, userId)!",
+                message: "Thieu thong tin bat buoc (postId, name, email, phone, class)!",
             }
         }
 
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
+        // Kiem tra post co ton tai khong
+        const post = await prisma.tutor_post.findUnique({
+            where: { id: postId },
         });
 
-        if (!user) {
-            return { status: "ERR", message: "User not found!" }
+        if (!post) {
+            return { status: "ERR", message: "Post not found!" }
         }
 
         const createdApp = await prisma.application.create({
             data: {
                 name: name,
                 email: email,
-                class: className, // using className variable because class is a reserved keyword
-                userId: userId,
+                phone: phone,
+                class: className,
+                note: note || null,
+                postId: postId,
+                studentId: studentId || null,
             }
         });
 
@@ -44,11 +48,23 @@ const getApplication = async (id) => {
         const app = await prisma.application.findUnique({
             where: { id },
             include: {
-                user: {
+                post: {
+                    select: {
+                        id: true,
+                        subject: true,
+                        Class: true,
+                        tutor: {
+                            select: {
+                                id: true,
+                                name: true,
+                            }
+                        }
+                    }
+                },
+                student: {
                     select: {
                         id: true,
                         name: true,
-                        email: true,
                         phone: true,
                     }
                 },
@@ -76,7 +92,13 @@ const getAllApplications = async (status) => {
         const apps = await prisma.application.findMany({
             where: whereClause,
             include: {
-                user: {
+                post: {
+                    select: {
+                        id: true,
+                        subject: true,
+                    }
+                },
+                student: {
                     select: {
                         id: true,
                         name: true,
@@ -97,20 +119,60 @@ const getAllApplications = async (status) => {
     }
 }
 
-const getApplicationsByUser = async (userId) => {
+const getApplicationsByPost = async (postId) => {
     try {
         const apps = await prisma.application.findMany({
-            where: { userId: userId },
+            where: { postId: postId },
+            include: {
+                student: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                },
+            },
             orderBy: { createdAt: "desc" },
         });
 
         return {
             status: "OK",
-            message: "Get applications by user success!",
+            message: "Get applications by post success!",
             data: apps,
         }
     } catch (err) {
-        console.log("Get applications by user failed!", err);
+        console.log("Get applications by post failed!", err);
+        return { status: "ERR", message: "Internal Server Error" }
+    }
+}
+
+const getApplicationsByStudent = async (studentId) => {
+    try {
+        const apps = await prisma.application.findMany({
+            where: { studentId: studentId },
+            include: {
+                post: {
+                    select: {
+                        id: true,
+                        subject: true,
+                        Class: true,
+                        tutor: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    }
+                },
+            },
+            orderBy: { createdAt: "desc" },
+        });
+
+        return {
+            status: "OK",
+            message: "Get applications by student success!",
+            data: apps,
+        }
+    } catch (err) {
+        console.log("Get applications by student failed!", err);
         return { status: "ERR", message: "Internal Server Error" }
     }
 }
@@ -145,7 +207,7 @@ const updateApplicationStatus = async (id, status) => {
     }
 }
 
-const deleteApplication = async (id, userId, isAdmin) => {
+const deleteApplication = async (id) => {
     try {
         const app = await prisma.application.findUnique({
             where: { id },
@@ -153,10 +215,6 @@ const deleteApplication = async (id, userId, isAdmin) => {
 
         if (!app) {
             return { status: "ERR", message: "Application not found!" }
-        }
-
-        if (app.userId !== userId && !isAdmin) {
-            return { status: "ERR", message: "Khong co quyen xoa don nay!" }
         }
 
         await prisma.application.delete({
@@ -177,7 +235,8 @@ module.exports = {
     createApplication,
     getApplication,
     getAllApplications,
-    getApplicationsByUser,
+    getApplicationsByPost,
+    getApplicationsByStudent,
     updateApplicationStatus,
     deleteApplication,
 }

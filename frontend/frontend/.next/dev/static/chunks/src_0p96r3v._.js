@@ -1304,6 +1304,7 @@ const formSchema = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$schema
     field: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập lĩnh vực"),
     subject: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập môn dạy"),
     Class: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập lớp"),
+    address: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập địa chỉ"),
     method: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập hình thức"),
     description: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(20, "Mô tả ít nhất 20 ký tự").max(100, "Mô tả tối đa 100 ký tự"),
     proof: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$schemas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().min(1, "Vui lòng nhập minh chứng")
@@ -1369,12 +1370,12 @@ function FileIcon() {
             strokeLinejoin: "round"
         }, void 0, false, {
             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-            lineNumber: 92,
+            lineNumber: 94,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-        lineNumber: 90,
+        lineNumber: 92,
         columnNumber: 5
     }, this);
 }
@@ -1406,17 +1407,17 @@ function UploadIcon({ isDragOver }) {
                 strokeLinejoin: "round"
             }, void 0, false, {
                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                lineNumber: 108,
+                lineNumber: 110,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-            lineNumber: 105,
+            lineNumber: 107,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-        lineNumber: 101,
+        lineNumber: 103,
         columnNumber: 5
     }, this);
 }
@@ -1450,6 +1451,7 @@ const UpdatePostPage = ()=>{
             userId: userId || "",
             subject: "",
             Class: "",
+            address: "",
             description: "",
             method: "",
             tutorname: "",
@@ -1595,12 +1597,12 @@ const UpdatePostPage = ()=>{
                     }, null, 2)
                 }, void 0, false, {
                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                    lineNumber: 245,
+                    lineNumber: 248,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                lineNumber: 244,
+                lineNumber: 247,
                 columnNumber: 9
             }, this),
             position: "bottom-right"
@@ -1628,12 +1630,12 @@ const UpdatePostPage = ()=>{
                     children: "Đăng Khóa Học"
                 }, void 0, false, {
                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                    lineNumber: 265,
+                    lineNumber: 268,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                lineNumber: 264,
+                lineNumber: 267,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1644,7 +1646,7 @@ const UpdatePostPage = ()=>{
                         children: "Nhập thông tin khóa"
                     }, void 0, false, {
                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                        lineNumber: 268,
+                        lineNumber: 271,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1655,12 +1657,12 @@ const UpdatePostPage = ()=>{
                                     children: "Vui lòng nhập đủ thông tin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                    lineNumber: 271,
+                                    lineNumber: 274,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                lineNumber: 270,
+                                lineNumber: 273,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1683,7 +1685,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Tên người dạy"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 284,
+                                                                            lineNumber: 287,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1692,7 +1694,7 @@ const UpdatePostPage = ()=>{
                                                                             placeholder: "Nguyễn Văn A"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 285,
+                                                                            lineNumber: 288,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -1701,18 +1703,18 @@ const UpdatePostPage = ()=>{
                                                                             ]
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 286,
+                                                                            lineNumber: 289,
                                                                             columnNumber: 50
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 283,
+                                                                    lineNumber: 286,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 281,
+                                                            lineNumber: 284,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1724,7 +1726,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Lĩnh vực"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 293,
+                                                                            lineNumber: 296,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1733,7 +1735,7 @@ const UpdatePostPage = ()=>{
                                                                             placeholder: "Toán, Lý, Hoá..."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 294,
+                                                                            lineNumber: 297,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -1742,24 +1744,24 @@ const UpdatePostPage = ()=>{
                                                                             ]
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 295,
+                                                                            lineNumber: 298,
                                                                             columnNumber: 50
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 292,
+                                                                    lineNumber: 295,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 290,
+                                                            lineNumber: 293,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 280,
+                                                    lineNumber: 283,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1774,7 +1776,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Tên môn dạy"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 307,
+                                                                            lineNumber: 310,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1783,7 +1785,7 @@ const UpdatePostPage = ()=>{
                                                                             placeholder: "Toán"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 308,
+                                                                            lineNumber: 311,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -1792,18 +1794,18 @@ const UpdatePostPage = ()=>{
                                                                             ]
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 309,
+                                                                            lineNumber: 312,
                                                                             columnNumber: 50
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 306,
+                                                                    lineNumber: 309,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 304,
+                                                            lineNumber: 307,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1815,7 +1817,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Lớp"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 316,
+                                                                            lineNumber: 319,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1824,7 +1826,7 @@ const UpdatePostPage = ()=>{
                                                                             placeholder: "Lớp 10"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 317,
+                                                                            lineNumber: 320,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -1833,24 +1835,24 @@ const UpdatePostPage = ()=>{
                                                                             ]
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 318,
+                                                                            lineNumber: 321,
                                                                             columnNumber: 50
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 315,
+                                                                    lineNumber: 318,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 313,
+                                                            lineNumber: 316,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 303,
+                                                    lineNumber: 306,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -1862,7 +1864,7 @@ const UpdatePostPage = ()=>{
                                                                     children: "Hình thức"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 328,
+                                                                    lineNumber: 331,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1871,7 +1873,7 @@ const UpdatePostPage = ()=>{
                                                                     placeholder: "Online / Offline"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 329,
+                                                                    lineNumber: 332,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -1880,18 +1882,18 @@ const UpdatePostPage = ()=>{
                                                                     ]
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 330,
+                                                                    lineNumber: 333,
                                                                     columnNumber: 48
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 327,
+                                                            lineNumber: 330,
                                                             columnNumber: 23
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 325,
+                                                    lineNumber: 328,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1902,7 +1904,7 @@ const UpdatePostPage = ()=>{
                                                             children: "Thời gian"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 337,
+                                                            lineNumber: 340,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1916,7 +1918,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Chọn các thứ học trong tuần"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 340,
+                                                                            lineNumber: 343,
                                                                             columnNumber: 25
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1931,13 +1933,13 @@ const UpdatePostPage = ()=>{
                                                                                     children: d.label
                                                                                 }, d.value, false, {
                                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                    lineNumber: 345,
+                                                                                    lineNumber: 348,
                                                                                     columnNumber: 31
                                                                                 }, ("TURBOPACK compile-time value", void 0));
                                                                             })
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 341,
+                                                                            lineNumber: 344,
                                                                             columnNumber: 25
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         form.formState.errors.schedules?.root && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1945,13 +1947,13 @@ const UpdatePostPage = ()=>{
                                                                             children: form.formState.errors.schedules.root.message
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 356,
+                                                                            lineNumber: 359,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 339,
+                                                                    lineNumber: 342,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1962,7 +1964,7 @@ const UpdatePostPage = ()=>{
                                                                             children: "Cấu hình khung giờ từng buổi"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 362,
+                                                                            lineNumber: 365,
                                                                             columnNumber: 25
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         fields.map((field, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1973,7 +1975,7 @@ const UpdatePostPage = ()=>{
                                                                                         children: field.day
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                        lineNumber: 365,
+                                                                                        lineNumber: 368,
                                                                                         columnNumber: 29
                                                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1992,12 +1994,12 @@ const UpdatePostPage = ()=>{
                                                                                                                         className: "w-[100px] h-8 text-xs",
                                                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                            lineNumber: 371,
+                                                                                                                            lineNumber: 374,
                                                                                                                             columnNumber: 88
                                                                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                        lineNumber: 371,
+                                                                                                                        lineNumber: 374,
                                                                                                                         columnNumber: 39
                                                                                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -2007,7 +2009,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "08:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 373,
+                                                                                                                                lineNumber: 376,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2015,7 +2017,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "09:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 374,
+                                                                                                                                lineNumber: 377,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2023,7 +2025,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "18:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 375,
+                                                                                                                                lineNumber: 378,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2031,35 +2033,35 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "19:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 376,
+                                                                                                                                lineNumber: 379,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                                                                         ]
                                                                                                                     }, void 0, true, {
                                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                        lineNumber: 372,
+                                                                                                                        lineNumber: 375,
                                                                                                                         columnNumber: 39
                                                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                lineNumber: 370,
+                                                                                                                lineNumber: 373,
                                                                                                                 columnNumber: 37
                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                lineNumber: 379,
+                                                                                                                lineNumber: 382,
                                                                                                                 columnNumber: 37
                                                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                        lineNumber: 369,
+                                                                                                        lineNumber: 372,
                                                                                                         columnNumber: 35
                                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                lineNumber: 367,
+                                                                                                lineNumber: 370,
                                                                                                 columnNumber: 31
                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2067,7 +2069,7 @@ const UpdatePostPage = ()=>{
                                                                                                 children: "-"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                lineNumber: 383,
+                                                                                                lineNumber: 386,
                                                                                                 columnNumber: 31
                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormField"], {
@@ -2083,12 +2085,12 @@ const UpdatePostPage = ()=>{
                                                                                                                         className: "w-[100px] h-8 text-xs",
                                                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                            lineNumber: 388,
+                                                                                                                            lineNumber: 391,
                                                                                                                             columnNumber: 88
                                                                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                                                                     }, void 0, false, {
                                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                        lineNumber: 388,
+                                                                                                                        lineNumber: 391,
                                                                                                                         columnNumber: 39
                                                                                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -2098,7 +2100,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "10:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 390,
+                                                                                                                                lineNumber: 393,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2106,7 +2108,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "11:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 391,
+                                                                                                                                lineNumber: 394,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2114,7 +2116,7 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "20:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 392,
+                                                                                                                                lineNumber: 395,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -2122,65 +2124,65 @@ const UpdatePostPage = ()=>{
                                                                                                                                 children: "21:00"
                                                                                                                             }, void 0, false, {
                                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                                lineNumber: 393,
+                                                                                                                                lineNumber: 396,
                                                                                                                                 columnNumber: 41
                                                                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                                                                         ]
                                                                                                                     }, void 0, true, {
                                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                        lineNumber: 389,
+                                                                                                                        lineNumber: 392,
                                                                                                                         columnNumber: 39
                                                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                                                 ]
                                                                                                             }, void 0, true, {
                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                lineNumber: 387,
+                                                                                                                lineNumber: 390,
                                                                                                                 columnNumber: 37
                                                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$form$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FormMessage"], {}, void 0, false, {
                                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                                lineNumber: 396,
+                                                                                                                lineNumber: 399,
                                                                                                                 columnNumber: 37
                                                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                        lineNumber: 386,
+                                                                                                        lineNumber: 389,
                                                                                                         columnNumber: 35
                                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                                lineNumber: 384,
+                                                                                                lineNumber: 387,
                                                                                                 columnNumber: 31
                                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                        lineNumber: 366,
+                                                                                        lineNumber: 369,
                                                                                         columnNumber: 29
                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                 ]
                                                                             }, field.id, true, {
                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                lineNumber: 364,
+                                                                                lineNumber: 367,
                                                                                 columnNumber: 27
                                                                             }, ("TURBOPACK compile-time value", void 0)))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 361,
+                                                                    lineNumber: 364,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 338,
+                                                            lineNumber: 341,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 336,
+                                                    lineNumber: 339,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hook$2d$form$2f$dist$2f$index$2e$esm$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Controller"], {
@@ -2194,7 +2196,7 @@ const UpdatePostPage = ()=>{
                                                                     children: "Mô tả"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 411,
+                                                                    lineNumber: 414,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2d$group$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["InputGroup"], {
@@ -2207,7 +2209,7 @@ const UpdatePostPage = ()=>{
                                                                             className: "min-h-24 resize-none"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 413,
+                                                                            lineNumber: 416,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2d$group$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["InputGroupAddon"], {
@@ -2220,25 +2222,25 @@ const UpdatePostPage = ()=>{
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                lineNumber: 416,
+                                                                                lineNumber: 419,
                                                                                 columnNumber: 29
                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                            lineNumber: 415,
+                                                                            lineNumber: 418,
                                                                             columnNumber: 27
                                                                         }, ("TURBOPACK compile-time value", void 0))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 412,
+                                                                    lineNumber: 415,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldDescription"], {
                                                                     children: "Cảm ơn bạn đã chia sẻ thông tin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 421,
+                                                                    lineNumber: 424,
                                                                     columnNumber: 25
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 fieldState.invalid && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FieldError"], {
@@ -2247,18 +2249,18 @@ const UpdatePostPage = ()=>{
                                                                     ]
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 422,
+                                                                    lineNumber: 425,
                                                                     columnNumber: 48
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 410,
+                                                            lineNumber: 413,
                                                             columnNumber: 23
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 408,
+                                                    lineNumber: 411,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2269,12 +2271,12 @@ const UpdatePostPage = ()=>{
                                                                 children: "Upload Minh Chứng"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                lineNumber: 430,
+                                                                lineNumber: 433,
                                                                 columnNumber: 23
                                                             }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 429,
+                                                            lineNumber: 432,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$es$2f$react$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["motion"].div, {
@@ -2306,14 +2308,14 @@ const UpdatePostPage = ()=>{
                                                                     type: "file"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 451,
+                                                                    lineNumber: 454,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(UploadIcon, {
                                                                     isDragOver: isDragOver
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 453,
+                                                                    lineNumber: 456,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -2345,12 +2347,12 @@ const UpdatePostPage = ()=>{
                                                                         children: isDragOver ? "Thả file vào đây" : "Kéo thả hoặc nhấn để chọn file"
                                                                     }, isDragOver ? "drag" : "idle", false, {
                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                        lineNumber: 457,
+                                                                        lineNumber: 460,
                                                                         columnNumber: 27
                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 455,
+                                                                    lineNumber: 458,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2358,13 +2360,13 @@ const UpdatePostPage = ()=>{
                                                                     children: "Ảnh, PDF • Không giới hạn dung lượng"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                    lineNumber: 469,
+                                                                    lineNumber: 472,
                                                                     columnNumber: 23
                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 432,
+                                                            lineNumber: 435,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -2387,12 +2389,12 @@ const UpdatePostPage = ()=>{
                                                                 children: fileError
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                lineNumber: 476,
+                                                                lineNumber: 479,
                                                                 columnNumber: 25
                                                             }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 474,
+                                                            lineNumber: 477,
                                                             columnNumber: 21
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         files.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -2433,7 +2435,7 @@ const UpdatePostPage = ()=>{
                                                                         children: [
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FileIcon, {}, void 0, false, {
                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                lineNumber: 497,
+                                                                                lineNumber: 500,
                                                                                 columnNumber: 31
                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2444,7 +2446,7 @@ const UpdatePostPage = ()=>{
                                                                                         children: file.name
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                        lineNumber: 499,
+                                                                                        lineNumber: 502,
                                                                                         columnNumber: 33
                                                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2452,13 +2454,13 @@ const UpdatePostPage = ()=>{
                                                                                         children: formatFileSize(file.size)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                        lineNumber: 500,
+                                                                                        lineNumber: 503,
                                                                                         columnNumber: 33
                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                lineNumber: 498,
+                                                                                lineNumber: 501,
                                                                                 columnNumber: 31
                                                                             }, ("TURBOPACK compile-time value", void 0)),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$motion$2f$dist$2f$es$2f$react$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["motion"].button, {
@@ -2488,33 +2490,33 @@ const UpdatePostPage = ()=>{
                                                                                         strokeLinejoin: "round"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                        lineNumber: 512,
+                                                                                        lineNumber: 515,
                                                                                         columnNumber: 35
                                                                                     }, ("TURBOPACK compile-time value", void 0))
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                    lineNumber: 510,
+                                                                                    lineNumber: 513,
                                                                                     columnNumber: 33
                                                                                 }, ("TURBOPACK compile-time value", void 0))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                                lineNumber: 502,
+                                                                                lineNumber: 505,
                                                                                 columnNumber: 31
                                                                             }, ("TURBOPACK compile-time value", void 0))
                                                                         ]
                                                                     }, `${file.name}-${file.size}-${file.lastModified}`, true, {
                                                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                        lineNumber: 488,
+                                                                        lineNumber: 491,
                                                                         columnNumber: 29
                                                                     }, ("TURBOPACK compile-time value", void 0)))
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                                lineNumber: 486,
+                                                                lineNumber: 489,
                                                                 columnNumber: 25
                                                             }, ("TURBOPACK compile-time value", void 0))
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 485,
+                                                            lineNumber: 488,
                                                             columnNumber: 23
                                                         }, ("TURBOPACK compile-time value", void 0)),
                                                         form.formState.errors.schedules?.root && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2522,34 +2524,34 @@ const UpdatePostPage = ()=>{
                                                             children: form.formState.errors.schedules.root.message
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                            lineNumber: 521,
+                                                            lineNumber: 524,
                                                             columnNumber: 23
                                                         }, ("TURBOPACK compile-time value", void 0))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                                    lineNumber: 428,
+                                                    lineNumber: 431,
                                                     columnNumber: 19
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                            lineNumber: 277,
+                                            lineNumber: 280,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     }, void 0, false, {
                                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                        lineNumber: 276,
+                                        lineNumber: 279,
                                         columnNumber: 15
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                    lineNumber: 275,
+                                    lineNumber: 278,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                lineNumber: 273,
+                                lineNumber: 276,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardFooter"], {
@@ -2567,7 +2569,7 @@ const UpdatePostPage = ()=>{
                                             children: "Reset"
                                         }, void 0, false, {
                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                            lineNumber: 533,
+                                            lineNumber: 536,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2576,36 +2578,36 @@ const UpdatePostPage = ()=>{
                                             children: "Submit"
                                         }, void 0, false, {
                                             fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                            lineNumber: 536,
+                                            lineNumber: 539,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                    lineNumber: 532,
+                                    lineNumber: 535,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                                lineNumber: 531,
+                                lineNumber: 534,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                        lineNumber: 269,
+                        lineNumber: 272,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-                lineNumber: 267,
+                lineNumber: 270,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/src/views/UpdatePostPage/UpdatePostPage.tsx",
-        lineNumber: 263,
+        lineNumber: 266,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

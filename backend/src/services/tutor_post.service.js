@@ -2,9 +2,9 @@ const prisma = require("../config/prisma")
 
 const createPost = async (newPost) => {
     try {
-        const { userId, subject, Class, description, method, tutorname, field, proof, schedules } = newPost;
+        const { userId, subject, address, Class, description, method, field, proof, schedules } = newPost;
 
-        if (!userId || !subject || !Class || !description || !method || !tutorname || !field || !proof) {
+        if (!userId || !subject || !address || !Class || !description || !method || !field || !proof) {
             return {
                 status: "ERR",
                 message: "Thieu thong tin bat buoc!",
@@ -29,12 +29,12 @@ const createPost = async (newPost) => {
             };
         }
         
-        // Kiem tra user co phai tutor khong
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
+        // Kiem tra user co phai tutor khong va lay tutorProfile
+        const tutorProfile = await prisma.tutor_profile.findUnique({
+            where: { userId: userId },
         });
         
-        if (!user || user.role !== "tutor") {
+        if (!tutorProfile) {
             return {
                 status: "ERR",
                 message: "Chi khi la gia su moi dang bai duoc!",
@@ -45,10 +45,10 @@ const createPost = async (newPost) => {
             data: {
                 subject,
                 Class,
+                address,
                 description,
                 method,
-                userId,
-                tutorname,
+                tutorId: tutorProfile.id,
                 field,
                 proof,
                 schedules: {
@@ -83,12 +83,18 @@ const getPost = async (id) => {
         const post = await prisma.tutor_post.findUnique({
             where: { id },
             include: {
-                user: {
+                tutor: {
                     select: {
                         id: true,
                         name: true,
-                        email: true,
                         phone: true,
+                        avatar: true,
+                        user: {
+                            select: {
+                                id: true,
+                                email: true,
+                            }
+                        }
                     }
                 },
                 schedules: {
@@ -130,10 +136,11 @@ const getAllPosts = async () => {
         const posts = await prisma.tutor_post.findMany({
             where: { status: 'approved'},
             include: {
-                user: {
+                tutor: {
                     select: {
                         id: true,
                         name: true,
+                        avatar: true,
                     },
                 },
                 schedules: {
@@ -160,8 +167,21 @@ const getAllPosts = async () => {
 
 const getPostsByUser = async (userId) => {
     try {
-        const posts = await prisma.tutor_post.findMany({
+        // Tim tutor profile tu userId truoc
+        const tutorProfile = await prisma.tutor_profile.findUnique({
             where: { userId: userId },
+        });
+
+        if (!tutorProfile) {
+            return {
+                status: "OK",
+                message: "User khong co tutor profile!",
+                data: [],
+            }
+        }
+
+        const posts = await prisma.tutor_post.findMany({
+            where: { tutorId: tutorProfile.id },
             include: {
                 schedules: {
                     select: {
@@ -189,13 +209,15 @@ const updatePost = async (id, userId, data) => {
     try {
         const post = await prisma.tutor_post.findUnique({
             where: { id },
+            include: { tutor: true },
         });
 
         if (!post) {
             return { status: "ERR", message: "Post not found!" }
         }
 
-        if (post.userId !== userId) {
+        // Kiem tra qua tutor profile
+        if (post.tutor.userId !== userId) {
             return { status: "ERR", message: "Khong co quyen chinh sua bai dang nay!" }
         }
 
@@ -205,9 +227,9 @@ const updatePost = async (id, userId, data) => {
         const updateData = {};
         if (postData.subject !== undefined) updateData.subject = postData.subject;
         if (postData.Class !== undefined) updateData.Class = postData.Class;
+        if (postData.address !== undefined) updateData.address = postData.address;
         if (postData.description !== undefined) updateData.description = postData.description;
         if (postData.method !== undefined) updateData.method = postData.method;
-        if (postData.tutorname !== undefined) updateData.tutorname = postData.tutorname;
         if (postData.field !== undefined) updateData.field = postData.field;
         if (postData.proof !== undefined) updateData.proof = postData.proof;
 
@@ -246,13 +268,14 @@ const deletePost = async (id, userId, isAdmin) => {
     try {
         const post = await prisma.tutor_post.findUnique({
             where: { id },
+            include: { tutor: true },
         });
 
         if (!post) {
             return { status: "ERR", message: "Post not found!" }
         }
 
-        if (post.userId !== userId && !isAdmin) {
+        if (post.tutor.userId !== userId && !isAdmin) {
             return { status: "ERR", message: "Khong co quyen xoa bai dang nay!" }
         }
 

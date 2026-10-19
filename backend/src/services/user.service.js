@@ -1,17 +1,15 @@
 const bcrypt = require("bcrypt");
 const prisma = require("../config/prisma")
-const { genneralAccessToken, refreshAccessToken, refreshTokenJwtService } = require("./jwt.service");
+const { genneralAccessToken, refreshAccessToken } = require("./jwt.service");
 
 const createUser = async (newUser) => {
-
     try {
-
-        const { email, name, age, phone, role, address, password, isAdmin } = newUser
+        const { email, password, role } = newUser;
 
         if (!email || !password) {
             return {
                 status: "ERR",
-                message: "phone and password are compulsory!",
+                message: "Email and password are required!",
             }
         };
 
@@ -30,21 +28,13 @@ const createUser = async (newUser) => {
 
         const createdUser = await prisma.user.create({
             data: {
-                name: name || "Client",
                 email: email,
-                phone: phone,
-                isAdmin: isAdmin === true,
                 password: hash,
-                address: address,
-                age: age,
-                role: role
+                role: role || 'student',
             },
-            //choice
             select: {
                 id: true,
-                name: true,
                 email: true,
-                phone: true,
                 role: true,
                 createdAt: true,
             }
@@ -79,6 +69,11 @@ const loginUser = async (userLogin) => {
 
         const infoUser = await prisma.user.findUnique({
             where: { email },
+            include: {
+                adminProfile: true,
+                tutorProfile: true,
+                studentProfile: true,
+            }
         });
 
         if (!infoUser) {
@@ -98,14 +93,24 @@ const loginUser = async (userLogin) => {
         }
 
         const access_token = genneralAccessToken({
-            id: infoUser?.id,
-            isAdmin: infoUser?.isAdmin === true,
+            id: infoUser.id,
+            role: infoUser.role,
         });
 
         const refresh_token = refreshAccessToken({
-            id: infoUser?.id,
-            isAdmin: infoUser?.isAdmin === true,
+            id: infoUser.id,
+            role: infoUser.role,
         });
+
+        // Lay ten tu profile tuong ung
+        let profileName = null;
+        if (infoUser.role === 'admin' && infoUser.adminProfile) {
+            profileName = infoUser.adminProfile.name;
+        } else if (infoUser.role === 'tutor' && infoUser.tutorProfile) {
+            profileName = infoUser.tutorProfile.name;
+        } else if (infoUser.studentProfile) {
+            profileName = infoUser.studentProfile.name;
+        }
 
         return {
             status: "OK",
@@ -114,9 +119,9 @@ const loginUser = async (userLogin) => {
             refresh_token,
             data: {
                 id: infoUser.id,
-                name: infoUser.name,
                 email: infoUser.email,
                 role: infoUser.role,
+                name: profileName,
             }
         }
     } catch (err) {
@@ -141,30 +146,26 @@ const updateUser = async (id, data) => {
             }
         }
 
+        const updateData = {};
+        if (data.email) updateData.email = data.email;
+        if (data.role) updateData.role = data.role;
+
         const updatedUser = await prisma.user.update({
             where: { id },
-            data: {
-                name: data.name,
-                age: Number(data.age),
-                phone: data.phone,
-                role: data.role,
-                address: data.address,
-            },
+            data: updateData,
             select: {
                 id: true,
                 email: true,
-                name: true,
-                phone: true,
-                address: true,
                 role: true,
                 createdAt: true,
+                updatedAt: true,
             }
         });
 
         return {
             status: "OK",
             message: "Update Success",
-            updatedUser,
+            data: updatedUser,
         }
     } catch (err) {
         console.log("Update User Error:", err);
@@ -209,16 +210,14 @@ const getAllUser = async () => {
     try {
         const alluser = await prisma.user.findMany({
             select: {
-                email: true,
                 id: true,
-                name: true,
-                age: true,
-                phone: true,
+                email: true,
                 role: true,
-                address: true,
-                isAdmin: true,
                 createdAt: true,
                 updatedAt: true,
+                adminProfile: { select: { name: true } },
+                tutorProfile: { select: { name: true } },
+                studentProfile: { select: { name: true } },
             }
         });
 
@@ -241,16 +240,14 @@ const getDetailUser = async (id) => {
         const checkUser = await prisma.user.findUnique({
             where: { id },
             select: {
-                email: true,
                 id: true,
-                name: true,
-                age: true,
-                phone: true,
+                email: true,
                 role: true,
-                address: true,
-                isAdmin: true,
                 createdAt: true,
                 updatedAt: true,
+                adminProfile: true,
+                tutorProfile: true,
+                studentProfile: true,
             }
         })
 
@@ -270,7 +267,7 @@ const getDetailUser = async (id) => {
         console.log("Get detail failed", err);
         return {
             status: "ERR",
-            message: "Get d failed",
+            message: "Get detail failed",
         }
     }
 }

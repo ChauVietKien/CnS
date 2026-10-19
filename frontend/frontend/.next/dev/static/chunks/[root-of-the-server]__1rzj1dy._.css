@@ -773,10 +773,6 @@
     margin-bottom: calc(var(--spacing) * 5);
   }
 
-  .mb-10 {
-    margin-bottom: calc(var(--spacing) * 10);
-  }
-
   .ml-1 {
     margin-left: var(--spacing);
   }
@@ -1175,10 +1171,6 @@
 
   .justify-start {
     justify-content: flex-start;
-  }
-
-  .justify-items-center {
-    justify-items: center;
   }
 
   .gap-\(--card-spacing\) {

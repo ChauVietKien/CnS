@@ -39,6 +39,7 @@ import { useUser } from '@/context/UserContext'
 interface Post {
   subject: String,
   Class: String,
+  address: String,
   description: String,
   method: String,
   userId: String,
@@ -57,6 +58,7 @@ const formSchema = asymmetricScheduleSchema.omit({ title: true }).extend({
   field: z.string().min(1, "Vui lòng nhập lĩnh vực"),
   subject: z.string().min(1, "Vui lòng nhập môn dạy"),
   Class: z.string().min(1, "Vui lòng nhập lớp"),
+  address: z.string().min(1, "Vui lòng nhập địa chỉ"),
   method: z.string().min(1, "Vui lòng nhập hình thức"),
   description: z.string().min(20, "Mô tả ít nhất 20 ký tự").max(100, "Mô tả tối đa 100 ký tự"),
   proof: z.string().min(1, "Vui lòng nhập minh chứng"),
@@ -133,6 +135,7 @@ const UpdatePostPage = () => {
       userId: userId || "",
       subject: "",
       Class: "",
+      address: "",
       description: "",
       method: "",
       tutorname: "",

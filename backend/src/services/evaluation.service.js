@@ -58,11 +58,18 @@ const createEvaluation = async (newEvaluation) => {
 
 const getEvaluation = async (id) => {
     try {
-        const evaluation = await prisma.evaluation.findMany({
+        const evaluation = await prisma.evaluation.findUnique({
             where: { id },
             include: {
+                tutor: {
+                    select: {
+                        id: true,
+                        name: true,
+                    }
+                },
                 tutor_post: {
                     select: {
+                        id: true,
                         subject: true,
                     }
                 }
@@ -113,6 +120,13 @@ const getEvaluationsByPost = async (postId) => {
     try {
         const evaluations = await prisma.evaluation.findMany({
             where: { tutor_postId: postId },
+            include: {
+                tutor: {
+                    select: {
+                        name: true,
+                    }
+                }
+            },
             orderBy: { createdAt: "desc" },
         });
 

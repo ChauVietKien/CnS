@@ -4,12 +4,12 @@ dotenv.config();
 
 const genneralAccessToken = (payload) => {
     const userId = payload?.id || payload?._id;
-    const isAdmin = payload?.isAdmin === true;
+    const role = payload?.role || 'student';
 
-    const expiresIn = isAdmin ? '5m' : '15m';
+    const expiresIn = role === 'admin' ? '5m' : '15m';
 
     return jwt.sign(
-        { id: userId, isAdmin },
+        { id: userId, role },
         process.env.ACCESS_TOKEN,
         { expiresIn },
     );
@@ -17,12 +17,12 @@ const genneralAccessToken = (payload) => {
 
 const refreshAccessToken = (payload) => {
     const userId = payload?.id || payload?._id;
-    const isAdmin = payload?.isAdmin === true;
+    const role = payload?.role || 'student';
 
-    const expiresIn = isAdmin ? '2d' : '7d';
+    const expiresIn = role === 'admin' ? '2d' : '7d';
 
     return jwt.sign(
-        { id: userId, isAdmin },
+        { id: userId, role },
         process.env.REFRESH_TOKEN,
         { expiresIn },
     );
@@ -43,7 +43,7 @@ const refreshTokenJwtService = (token) => {
 
         const newAccess_token = genneralAccessToken({
             id:  decode?.id || decode?._id,
-            isAdmin: decode?.isAdmin === true,
+            role: decode?.role || 'student',
         })
 
         return {
@@ -64,4 +64,3 @@ module.exports = {
     refreshAccessToken,
     refreshTokenJwtService
 }
-
