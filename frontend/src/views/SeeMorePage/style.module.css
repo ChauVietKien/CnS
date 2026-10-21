@@ -1,46 +1,46 @@
 .block {
-    min-width: 300px;
-    min-height: 100px;
-    display: flex;
-    flex-direction: row;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    background-color: #fff;
-    margin-bottom: 3rem;
-    margin-top: 1rem;
+  min-width: 300px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
+  margin-bottom: 3rem;
+  margin-top: 1rem;
 }
 
 .img {
-    position: sticky;
-    flex-shrink: 0;
-    width: 40%;
-    height: 100%;
-    align-items: flex-start; 
+  position: sticky;
+  flex-shrink: 0;
+  width: 40%;
+  height: 100%;
+  align-items: flex-start;
 }
 
 .image {
-    height: auto;
-    width: 100%;
-    object-fit: cover;
-    overflow: hidden;
-    padding: 5px;
-    border-radius: 1rem;
+  height: auto;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+  padding: 5px;
+  border-radius: 1rem;
 }
 
 .intro {
-    width: 60%;
-    padding: 2rem 2rem 0.5rem 2rem;
-    background-color: transparent;
-    flex-direction: column;
-    display: flex;
+  width: 60%;
+  padding: 2rem 2rem 0.5rem 2rem;
+  background-color: transparent;
+  flex-direction: column;
+  display: flex;
 }
 
 .info {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 .button {
-    display: flex;
-    gap: 2rem;
-    justify-content: flex-end; 
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-end;
 }
