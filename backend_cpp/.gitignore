@@ -1,0 +1,8 @@
+build/
+*.o
+*.out
+*.exe
+server_app
+test_runner
+.vscode/
+.DS_Store

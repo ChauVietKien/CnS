@@ -1,0 +1,2 @@
+1|1|Day Toan Lop 12 On Thi Dai Hoc|Chuyen de Ham so|Toan hoc|12|150000|0|Thu 2, 4, 6||0|0|
+2|1|Day Tin Hoc Lap Trinh C++|Co ban den nang cao|Tin hoc|10|200000|1|Thu 3, 5, 7||0|0|
