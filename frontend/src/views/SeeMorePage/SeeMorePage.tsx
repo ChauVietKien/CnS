@@ -37,7 +37,13 @@ const SeeMorePage = () => {
   return (
     <div className={style.block}>
       <div className={style.img}>
-        <Image src={cartList.image} alt="logopost" className={style.image} />
+        <Image
+          src={cartList.image}
+          alt="logopost"
+          width={600}
+          height={400}
+          className={style.image}
+        />
       </div>
       <div className={style.intro}>
         <div className={style.info}>
