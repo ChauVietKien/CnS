@@ -1,5 +1,6 @@
 "use client";
 
+import { BlockComponent } from "@/components/BlockComponent/BlockComponent";
 import { useUser } from "@/context/UserContext";
 import * as ApplicationService from "@/services/ApplicationService";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +12,10 @@ const CoursePage = () => {
 
   const { data: blockList, isPending } = useQuery({
     queryKey: ["id", userId],
-    queryFn: () => ApplicationService.getApplication(userId!),
+    queryFn: async () => {
+      const res = await ApplicationService.getApplication(userId!);
+      return res.data || "";
+    },
     enabled: !!userId,
   });
 
@@ -20,9 +24,10 @@ const CoursePage = () => {
   return (
     <div className={style.maindiv}>
       <h1 className="font-bold text-3xl mb-2">Thông tin toàn bộ khóa học</h1>
-      {/* {blockList.map((item) => (
-        <BlockComponent key={item.id} courseInfo={item} />
-      ))} */}
+      {Array.isArray(blockList) &&
+        blockList.map((item) => (
+          <BlockComponent key={item.id} courseInfo={item} />
+        ))}
     </div>
   );
 };

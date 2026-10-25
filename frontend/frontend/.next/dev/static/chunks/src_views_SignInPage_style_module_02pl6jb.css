@@ -1,0 +1,16 @@
+/* [project]/src/views/SignInPage/style.module.css [app-client] (css) */
+.style-module__kQxlYq__maindiv {
+  background-color: #faebd7;
+  border-radius: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  max-width: 400px;
+  min-height: 400px;
+  margin: 15vh auto auto;
+  padding: 20px;
+  display: flex;
+}
+
+/*# sourceMappingURL=src_views_SignInPage_style_module_02pl6jb.css.map*/

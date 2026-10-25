@@ -5,7 +5,7 @@ const createApplication = async (newApplication) => {
     const { postId, studentId, name, email, phone, className, note } =
       newApplication;
     console.log("req", postId, studentId, name, email, phone, className, note);
-    if (!postId || !name || !email || !phone || !className) {
+    if (!postId || !name || !email || !phone || !className || !studentId) {
       return {
         status: "ERR",
         message:
@@ -30,7 +30,7 @@ const createApplication = async (newApplication) => {
         class: className,
         note: note || null,
         postId: postId,
-        studentId: studentId || null,
+        studentId: studentId,
       },
     });
 
@@ -45,20 +45,36 @@ const createApplication = async (newApplication) => {
   }
 };
 
-const getApplication = async (id) => {
+const getPersonalApplication = async (id) => {
   try {
-    const app = await prisma.application.findUnique({
-      where: { id },
+    if (!id) {
+      return res
+        .status(400)
+        .json({ status: "ERR", message: "ID không được để trống!" });
+    }
+
+    const app = await prisma.application.findMany({
+      where: { studentId: id },
       include: {
         post: {
           select: {
             id: true,
             subject: true,
             Class: true,
+            method: true,
+            address: true,
+            price: true,
             tutor: {
               select: {
                 id: true,
                 name: true,
+              },
+            },
+            schedules: {
+              select: {
+                day: true,
+                startTime: true,
+                endTime: true,
               },
             },
           },
@@ -235,7 +251,7 @@ const deleteApplication = async (id) => {
 
 module.exports = {
   createApplication,
-  getApplication,
+  getPersonalApplication,
   getAllApplications,
   getApplicationsByPost,
   getApplicationsByStudent,

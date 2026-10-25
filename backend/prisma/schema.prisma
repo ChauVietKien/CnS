@@ -33,6 +33,7 @@ model User {
   adminProfile   AdminProfile?
   tutorProfile   Tutor_profile?
   studentProfile StudentProfile?
+  applications Application[]
 }
 
 model AdminProfile {
@@ -52,8 +53,6 @@ model StudentProfile {
   phone       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  applications Application[]
 }
 
 model Tutor_profile {
@@ -102,8 +101,8 @@ model Application {
   note      String?
   postId    String
   post      Tutor_post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  studentId String?        
-  student   StudentProfile? @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  studentId String        
+  student   User? @relation(fields: [studentId], references: [id], onDelete: SetNull)
   status    Status          @default(pending)
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
