@@ -33,8 +33,8 @@ export function BlockComponent({ courseInfo }: { courseInfo: course }) {
           <p>Lớp: {courseInfo.class}</p>
         </div>
         <div className={style.undermid}>
-          <p>Hình Thức: {courseInfo.featured}</p>
-          <h4>Thời gian: {courseInfo.time}</h4>
+          {/* <p>Hình Thức: {courseInfo.featured}</p>
+          <h4>Thời gian: {courseInfo.time}</h4> */}
         </div>
         <div className={style.tail}>
           <Button className="bg-red-500 text-white hover:bg-red-700 ">
