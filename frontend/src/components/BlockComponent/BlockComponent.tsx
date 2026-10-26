@@ -59,17 +59,17 @@ export function BlockComponent({ courseInfo }: { courseInfo: course }) {
             <p>Địa chỉ chi tiết: {infoPost.address}</p>
           </div>
           <div className="flex flex-row justify-between">
-            <h4>
+            <div>
               Thời gian:
               {Array.isArray(tkb) &&
-                tkb.map((item) => (
-                  <p key={item.id}>
+                tkb.map((item, index) => (
+                  <p key={item.id || index}>
                     - Day: {item.day}
                     <br />- StartTime: {item.startTime}
                     <br />- EndTime: {item.endTime}
                   </p>
                 ))}
-            </h4>
+            </div>
             <p>Giá/Buổi: {infoPost.price}</p>
           </div>
         </div>

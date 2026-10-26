@@ -1,7 +1,6 @@
-'use client'
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardAction,
@@ -9,22 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Field, FieldGroup } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 import style from "./Card.module.css";
-import { useRouter } from "next/navigation"
 
 export interface CardItem {
   id: string;
@@ -35,15 +21,15 @@ export interface CardItem {
 }
 
 export function CardImage({ data }: { data: CardItem }) {
-  const router= useRouter();
+  const router = useRouter();
 
   const handleSeeMore = () => {
-    router.push("/seemore");
-  }
+    router.push(`/seemore/${data.id}`);
+  };
 
   const handleRegister = () => {
     router.push(`/register/${data.id}`);
-  }
+  };
 
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
@@ -57,9 +43,7 @@ export function CardImage({ data }: { data: CardItem }) {
           {/* <Badge variant="secondary">{data.bagde}</Badge> */}
         </CardAction>
         <CardTitle>{data.subject}</CardTitle>
-        <CardDescription>
-          {data.description}
-        </CardDescription>
+        <CardDescription>{data.description}</CardDescription>
       </CardHeader>
       <CardFooter className={style.cardfooter}>
         {/* <Dialog>
@@ -115,9 +99,13 @@ export function CardImage({ data }: { data: CardItem }) {
             </DialogContent>
           </form>
         </Dialog> */}
-        <Button className="w-35 bg-zinc-800" onClick={handleRegister}>Đăng Kí</Button>
-        <Button className="w-35 bg-zinc-800" onClick={handleSeeMore}>Xem Thêm</Button>
+        <Button className="w-35 bg-zinc-800" onClick={handleRegister}>
+          Đăng Kí
+        </Button>
+        <Button className="w-35 bg-zinc-800" onClick={handleSeeMore}>
+          Xem Thêm
+        </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }
