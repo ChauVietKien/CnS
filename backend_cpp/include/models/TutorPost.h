@@ -31,6 +31,9 @@ private:
     PostStatus status;
     bool isHiddenByAdmin;
     std::string adminHiddenReason;
+    std::string address;
+    std::string proof;
+    std::string classGrade;
 
 public:
     TutorPost();
@@ -81,6 +84,15 @@ public:
     void setAdminHiddenReason(const std::string& reason);
 
     bool isVisible() const;
+
+    std::string getAddress() const;
+    void setAddress(const std::string& addr);
+
+    std::string getProof() const;
+    void setProof(const std::string& p);
+
+    std::string getClassGrade() const;
+    void setClassGrade(const std::string& c);
 };
 
 #endif

@@ -87,6 +87,7 @@ interface TutorPost {
   Class: string;
   description: string;
   method: string;
+  price: string;
   address?: string | null;
   field: string;
   proof: string;
@@ -95,10 +96,13 @@ interface TutorPost {
 
 const Home = () => {
   const router = useRouter();
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
+  const [filterResults, setFilterResults] = useState<CardItem[] | null>(null);
+  const [mode, setMode] = useState<"ONLINE" | "OFFLINE">("OFFLINE");
+  const [price, setPrice] = useState<number[]>([200000]);
+  const [province, setProvince] = useState<string | null>(null);
   const [keyword, setKeyword] = useState("");
   const [results, setResults] = useState<TutorPost[]>([]);
-
-  const [price, setPrice] = useState([200000]);
 
   const { data: currentPost, isPending } = useQuery<{ data: CardItem[] }>({
     queryKey: ["post"],
@@ -110,6 +114,7 @@ const Home = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setKeyword(val);
+    setFilterResults(null);
     if (!val.trim()) setResults([]); // Reset ngay khi người dùng xóa trắng
   };
 
@@ -124,7 +129,22 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, [keyword]);
 
-  const displayedList = keyword.trim() ? results : posts;
+  const handleFilter = async () => {
+    setKeyword("");
+    setResults([]);
+    const params = new URLSearchParams();
+
+    if (selectedClass) params.append("classId", selectedClass);
+    if (mode) params.append("mode", mode);
+    if (price?.[0]) params.append("maxPrice", price[0].toString());
+    if (province) params.append("province", province);
+
+    const response = await algorithmscpp.getResFilter(params);
+
+    setFilterResults(response?.data);
+  };
+
+  const displayedList = keyword.trim() ? results : (filterResults ?? posts);
 
   return (
     <div className={style.main}>
@@ -153,7 +173,11 @@ const Home = () => {
                 <h4 className="leading-none font-medium">Lọc khóa học</h4>
               </div>
               <div className="grid gap-2">
-                <Combobox items={frameworks}>
+                <Combobox
+                  value={selectedClass}
+                  onValueChange={setSelectedClass}
+                  items={frameworks}
+                >
                   <ComboboxInput placeholder="Select a class" />
                   <ComboboxContent>
                     <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -166,13 +190,17 @@ const Home = () => {
                     </ComboboxList>
                   </ComboboxContent>
                 </Combobox>
-                <RadioGroup defaultValue="comfortable" className="w-fit">
+                <RadioGroup
+                  value={mode}
+                  onValueChange={(val) => setMode(val as "ONLINE" | "OFFLINE")}
+                  className="w-fit"
+                >
                   <div className="flex items-center gap-3">
-                    <RadioGroupItem value="default" id="r1" />
+                    <RadioGroupItem value="ONLINE" id="r1" />
                     <Label htmlFor="r1">Online</Label>
                   </div>
                   <div className="flex items-center gap-3">
-                    <RadioGroupItem value="comfortable" id="r2" />
+                    <RadioGroupItem value="OFFLINE" id="r2" />
                     <Label htmlFor="r2">Offline</Label>
                   </div>
                 </RadioGroup>
@@ -188,7 +216,11 @@ const Home = () => {
                   />
                   <p>/thang</p>
                 </div>
-                <Combobox items={framework}>
+                <Combobox
+                  items={framework}
+                  value={province}
+                  onValueChange={setProvince}
+                >
                   <ComboboxInput placeholder="Select a provine" />
                   <ComboboxContent>
                     <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -203,7 +235,10 @@ const Home = () => {
                 </Combobox>
               </div>
             </div>
-            <Button className="flex justify-self-end size-12 rounded-xl ml-auto">
+            <Button
+              onClick={handleFilter}
+              className="flex justify-self-end size-12 rounded-xl ml-auto"
+            >
               Filter
             </Button>
           </PopoverContent>

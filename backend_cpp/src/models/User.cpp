@@ -4,12 +4,12 @@ using namespace std;
 
 User::User() 
     : id(0), username(""), passwordHash(""), fullName(""), phone(""), email(""), 
-      role(Role::STUDENT), isLocked(false), lockReason("") {}
+      role(Role::STUDENT), isLocked(false), lockReason(""), age(22) {}
 
 User::User(int id, const string& username, const string& passwordHash, 
            const string& fullName, const string& phone, const string& email, Role role)
     : id(id), username(username), passwordHash(passwordHash), fullName(fullName), 
-      phone(phone), email(email), role(role), isLocked(false), lockReason("") {}
+      phone(phone), email(email), role(role), isLocked(false), lockReason(""), age(22) {}
 
 int User::getId() const { return id; }
 void User::setId(int newId) { id = newId; }
@@ -37,3 +37,6 @@ void User::setIsLocked(bool locked) { isLocked = locked; }
 
 string User::getLockReason() const { return lockReason; }
 void User::setLockReason(const string& reason) { lockReason = reason; }
+
+int User::getAge() const { return age; }
+void User::setAge(int a) { age = a; }

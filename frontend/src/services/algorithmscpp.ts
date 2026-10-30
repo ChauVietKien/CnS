@@ -11,3 +11,16 @@ export const getResSearch = async (names: string) => {
     return [];
   }
 };
+
+export const getResFilter = async (params: URLSearchParams) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/filter-post`,
+      { params },
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Lỗi search:", error);
+    return [];
+  }
+};

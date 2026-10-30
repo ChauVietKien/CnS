@@ -56,6 +56,15 @@ void TutorPost::setIsHiddenByAdmin(bool hidden) { isHiddenByAdmin = hidden; }
 string TutorPost::getAdminHiddenReason() const { return adminHiddenReason; }
 void TutorPost::setAdminHiddenReason(const string& reason) { adminHiddenReason = reason; }
 
+string TutorPost::getAddress() const { return address; }
+void TutorPost::setAddress(const string& addr) { address = addr; }
+
+string TutorPost::getProof() const { return proof; }
+void TutorPost::setProof(const string& p) { proof = p; }
+
+string TutorPost::getClassGrade() const { return classGrade; }
+void TutorPost::setClassGrade(const string& c) { classGrade = c; }
+
 bool TutorPost::isVisible() const {
     return status == PostStatus::OPEN && !isHiddenByAdmin;
 }

@@ -25,6 +25,7 @@ public:
     std::optional<User> login(const std::string& username, const std::string& password, std::string& errorMessage);
 
     std::optional<User> getUser(const std::string& username) const;
+    std::optional<User> getUserById(int id) const;
     bool lockUser(int userId, const std::string& reason);
     bool unlockUser(int userId);
     std::vector<User> getAllUsers() const;

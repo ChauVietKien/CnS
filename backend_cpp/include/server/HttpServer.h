@@ -22,9 +22,10 @@ struct HttpResponse {
     int statusCode;
     std::string contentType;
     std::string body;
+    std::string setCookie;
 
-    HttpResponse(int code = 200, const std::string& type = "application/json", const std::string& b = "")
-        : statusCode(code), contentType(type), body(b) {}
+    HttpResponse(int code = 200, const std::string& type = "application/json", const std::string& b = "", const std::string& cookie = "")
+        : statusCode(code), contentType(type), body(b), setCookie(cookie) {}
 };
 
 class HttpServer {
@@ -40,7 +41,7 @@ private:
     FileManager& fileManager;
 
     HttpRequest parseRequest(const std::string& rawRequest);
-    std::string buildResponse(const HttpResponse& response);
+    std::string buildResponse(const HttpResponse& response, const std::string& origin = "");
     HttpResponse routeRequest(const HttpRequest& request);
 
     std::string extractJsonValue(const std::string& json, const std::string& key);

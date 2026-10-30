@@ -89,6 +89,104 @@ app.get("/api/search", async (req, res) => {
   }
 });
 
+// 1. Nạp dữ liệu vào BST (Đảm bảo lấy đúng khóa chính id hoặc post_id)
+async function syncPostsToBST() {
+  try {
+    const allPosts = await prisma.tutor_post.findMany();
+
+    for (const post of allPosts) {
+      const postId = post.id ?? post.post_id; // Phòng trường hợp bảng dùng post_id
+      const params = new URLSearchParams({
+        id: String(postId || ""),
+        subject: post.subject || "",
+        classId: String(post.Class || ""),
+        mode: String(post.method || ""),
+        price: String(post.price || 0),
+        address: post.address || "",
+      });
+
+      await fetch(`http://127.0.0.1:8081/add-post?${params.toString()}`, {
+        method: "POST",
+      });
+    }
+
+    console.log(
+      `[BST] Đã nạp thành công ${allPosts.length} bài đăng vào cây BST C++`,
+    );
+  } catch (err) {
+    console.error("[BST] Lỗi nạp dữ liệu ban đầu:", err.message);
+  }
+}
+
+syncPostsToBST();
+
+// 2. API Filter: C++ lọc qua BST -> Prisma lấy full data kèm tutor
+app.get("/api/filter-post", async (req, res) => {
+  try {
+    // Extract query parameters with defaults
+    const { classId = "", mode = "", maxPrice = "", province = "" } = req.query;
+
+    // Determine if user provided any filter criteria
+    const hasFilter = Boolean(classId || mode || maxPrice || province);
+
+    // Build query parameters for C++ (include defaults; set maxPrice to high value if not provided)
+    const params = new URLSearchParams();
+    if (classId) params.append('classId', classId.trim());
+    if (mode) params.append('mode', mode.trim());
+    if (maxPrice) {
+      params.append('maxPrice', maxPrice.trim());
+    } else {
+      params.append('maxPrice', '10000000');
+    }
+    if (province) params.append('province', province.trim());
+    const queryString = params.toString();
+
+    let matchedIds = [];
+
+    if (hasFilter) {
+      try {
+        const cppRes = await fetch(
+          `http://127.0.0.1:8081/filter?${queryString}`,
+        );
+        const rawText = await cppRes.text();
+        if (rawText) {
+          const cppResult = JSON.parse(rawText);
+          matchedIds = (cppResult.data || []).map((item) => item.id);
+        }
+      } catch (err) {
+        console.warn("[BST] Lỗi gọi C++:", err.message);
+      }
+    }
+
+    // Logic truy vấn Prisma:
+    // - Nếu có lọc: lấy đúng bài có ID C++ trả về (kể cả mảng rỗng [] nếu không khớp)
+    // - Nếu không chọn bộ lọc nào: lấy toàn bộ bài đăng
+    // Build Prisma where clause combining C++ IDs (if any) and optional filters
+    const prismaWhere = {};
+    if (hasFilter && matchedIds.length) {
+      prismaWhere.id = { in: matchedIds };
+    }
+    if (classId) prismaWhere.Class = { equals: classId, mode: 'insensitive' };
+    if (mode) prismaWhere.method = { equals: mode, mode: 'insensitive' };
+    if (province) prismaWhere.address = { contains: province, mode: 'insensitive' };
+    if (maxPrice) prismaWhere.price = { lte: Number(maxPrice) };
+
+    const resultsRaw = await prisma.tutor_post.findMany({
+      where: prismaWhere,
+      include: { tutor: true },
+    });
+
+    // Apply price filter (<= maxPrice) if maxPrice is provided
+    const results = maxPrice && maxPrice.trim()
+      ? resultsRaw.filter((post) => Number(post.price) <= Number(maxPrice))
+      : resultsRaw;
+
+    return res.status(200).json({ success: true, data: results });
+  } catch (error) {
+    console.error("Lỗi Filter API:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+});
 routes(app);
 
 app.listen(5000, () => console.log("Run on port 5000!"));

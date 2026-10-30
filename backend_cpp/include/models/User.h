@@ -20,6 +20,7 @@ private:
     Role role;
     bool isLocked;
     std::string lockReason;
+    int age;
 
 public:
     User();
@@ -52,6 +53,8 @@ public:
 
     std::string getLockReason() const;
     void setLockReason(const std::string& reason);
+    int getAge() const;
+    void setAge(int a);
 };
 
 #endif
