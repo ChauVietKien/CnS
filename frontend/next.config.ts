@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
         hostname: "encrypted-tbn0.gstatic.com",
         pathname: "/**",
       },
+      {
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "bizweb.dktcdn.net",
+        pathname: "/**",
+      },
     ],
   },
 };

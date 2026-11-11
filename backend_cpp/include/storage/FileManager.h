@@ -6,7 +6,7 @@
 #include "../models/User.h"
 #include "../models/TutorProfile.h"
 #include "../models/TutorPost.h"
-#include "../models/Booking.h"
+#include "../models/Application.h"
 #include "../models/Review.h"
 
 class FileManager {
@@ -25,8 +25,8 @@ public:
     bool saveTutorPosts(const std::vector<TutorPost>& posts);
     std::vector<TutorPost> loadTutorPosts();
 
-    bool saveBookings(const std::vector<Booking>& bookings);
-    std::vector<Booking> loadBookings();
+    bool saveApplications(const std::vector<Application>& applications);
+    std::vector<Application> loadApplications();
 
     bool saveReviews(const std::vector<Review>& reviews);
     std::vector<Review> loadReviews();

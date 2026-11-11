@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///D:/AWS/CnS/frontend/src/app/(main)/page.module.css"],"sourcesContent":[".main {\n    flex: 1;\n    min-height: 0;\n}\n\n.card {\n    display: grid;\n    grid-template-columns: repeat(3, 1fr);\n    gap: 12px;\n    padding: 10px 20px 48px 20px;\n    max-width: 1240px;\n    margin: 0 auto;\n}\n"],"names":[],"mappings":"AAAA;;;;;AAKA"}}]
+}

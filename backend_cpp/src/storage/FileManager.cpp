@@ -239,26 +239,35 @@ vector<TutorPost> FileManager::loadTutorPosts() {
     return list;
 }
 
-bool FileManager::saveBookings(const vector<Booking>& bookings) {
-    ofstream file(dataDir + "/bookings.txt");
+bool FileManager::saveApplications(const vector<Application>& applications) {
+    ofstream file(dataDir + "/applications.txt");
     if (!file.is_open()) return false;
 
-    for (const auto& b : bookings) {
-        file << b.getId() << "|"
-             << b.getStudentId() << "|"
-             << b.getTutorId() << "|"
-             << b.getPostId() << "|"
-             << b.getScheduledTime() << "|"
-             << (b.getStatus() == BookingStatus::ACCEPTED ? "ACCEPTED" :
-                 b.getStatus() == BookingStatus::REJECTED ? "REJECTED" : "PENDING") << "|"
-             << b.getNotes() << "\n";
+    for (const auto& a : applications) {
+        file << a.getId() << "|"
+             << a.getStudentId() << "|"
+             << a.getTutorId() << "|"
+             << a.getPostId() << "|"
+             << a.getName() << "|"
+             << a.getEmail() << "|"
+             << a.getPhone() << "|"
+             << a.getSubject() << "|"
+             << a.getClassName() << "|"
+             << a.getTutorName() << "|"
+             << a.getMethod() << "|"
+             << a.getPrice() << "|"
+             << a.getAddress() << "|"
+             << a.getSchedule() << "|"
+             << a.getNote() << "|"
+             << a.getCreatedAt() << "|"
+             << a.getStatus() << "\n";
     }
     return true;
 }
 
-vector<Booking> FileManager::loadBookings() {
-    vector<Booking> list;
-    ifstream file(dataDir + "/bookings.txt");
+vector<Application> FileManager::loadApplications() {
+    vector<Application> list;
+    ifstream file(dataDir + "/applications.txt");
     if (!file.is_open()) return list;
 
     string line;
@@ -271,22 +280,62 @@ vector<Booking> FileManager::loadBookings() {
             parts.push_back(item);
         }
 
-        if (parts.size() >= 6) {
+        if (parts.size() >= 16) {
+            // Định dạng chi tiết đầy đủ (Rich format 17 trường)
             try {
                 int id = stoi(parts[0]);
                 int studentId = stoi(parts[1]);
                 int tutorId = stoi(parts[2]);
                 int postId = stoi(parts[3]);
-                string sched = parts[4];
-                BookingStatus status = BookingStatus::PENDING;
-                if (parts[5] == "ACCEPTED" || parts[5] == "1") status = BookingStatus::ACCEPTED;
-                else if (parts[5] == "REJECTED" || parts[5] == "2") status = BookingStatus::REJECTED;
-                string notes = (parts.size() > 6) ? parts[6] : "";
+                string name = parts[4];
+                string email = parts[5];
+                string phone = parts[6];
+                string subject = parts[7];
+                string className = parts[8];
+                string tutorName = parts[9];
+                string method = parts[10];
+                string price = parts[11];
+                string address = parts[12];
+                string schedule = parts[13];
+                string note = parts[14];
+                string createdAt = parts[15];
+                string status = (parts.size() > 16) ? parts[16] : "approved";
 
-                Booking b(id, studentId, tutorId, postId, sched);
-                b.setStatus(status);
-                b.setNotes(notes);
-                list.push_back(b);
+                Application a(id, studentId, tutorId, postId, name, email, phone, subject,
+                              className, tutorName, method, price, address, schedule, note, createdAt, status);
+                list.push_back(a);
+            } catch (...) {}
+        } else if (parts.size() >= 10) {
+            // Định dạng 11 trường cũ
+            try {
+                int id = stoi(parts[0]);
+                int studentId = stoi(parts[1]);
+                int tutorId = stoi(parts[2]);
+                int postId = stoi(parts[3]);
+                string name = parts[4];
+                string email = parts[5];
+                string phone = parts[6];
+                string className = parts[7];
+                string note = parts[8];
+                string createdAt = parts[9];
+                string status = (parts.size() > 10) ? parts[10] : "approved";
+
+                Application a(id, studentId, tutorId, postId, name, email, phone, "Toán học",
+                              className, "Châu Việt Kiên", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, createdAt, status);
+                list.push_back(a);
+            } catch (...) {}
+        } else if (parts.size() >= 6) {
+            // Backward compatibility
+            try {
+                int id = stoi(parts[0]);
+                int studentId = stoi(parts[1]);
+                int tutorId = stoi(parts[2]);
+                int postId = stoi(parts[3]);
+                string time = parts[4];
+                string note = (parts.size() > 6) ? parts[6] : "Dang ky hoc";
+                Application a(id, studentId, tutorId, postId, "Đức Minh", "minh@gmail.com", "0907654321", "Toán học",
+                              "12", "Châu Việt Kiên", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, time, "approved");
+                list.push_back(a);
             } catch (...) {}
         }
     }

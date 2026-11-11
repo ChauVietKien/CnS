@@ -2,7 +2,7 @@
 #include "../../include/models/User.h"
 #include "../../include/models/TutorProfile.h"
 #include "../../include/models/TutorPost.h"
-#include "../../include/models/Booking.h"
+#include "../../include/models/Application.h"
 #include "../../include/dsa/Set.h"
 #include <string>
 #include <functional>
@@ -184,7 +184,9 @@ template class HashTable<string, bool>;
 template class HashTable<int, TutorProfile>;
 template class HashTable<int, TutorPost>;
 template class HashTable<int, Set<string>>;
-template class HashTable<int, Booking>;
+template class HashTable<int, Application>;
 template class HashTable<int, int>;
 template class HashTable<string, string>;
 template class HashTable<string, int>;
+template class HashTable<int, string>;
+template class HashTable<int, double>;

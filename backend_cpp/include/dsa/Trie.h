@@ -29,6 +29,7 @@ public:
     void insert(const std::string& word, int refId = -1);
     std::vector<std::string> searchPrefix(const std::string& prefix, int limit = 10) const;
     std::vector<int> searchIdsByPrefix(const std::string& prefix) const;
+    void clear();
 };
 
 #endif

@@ -1,27 +1,10 @@
 "use client";
+
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -29,50 +12,86 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/context/UserContext";
 import { cn } from "@/lib/utils";
-import { asymmetricScheduleSchema } from "@/schema/schema";
 import * as PostService from "@/services/PostService";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  Controller,
-  FormProvider,
-  useFieldArray,
-  useForm,
-  useWatch,
-} from "react-hook-form";
+  ArrowLeft,
+  Calendar,
+  Check,
+  CheckCircle2,
+  Clock,
+  FileText,
+  GraduationCap,
+  Laptop,
+  Loader2,
+  MapPin,
+  Plus,
+  ShieldAlert,
+  Trash2,
+  UploadCloud,
+  X,
+} from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import style from "./UpdatePostPage.module.css";
 
-// ─── Schema mở rộng thêm các field thực tế ───────────────────────────────────
-const formSchema = asymmetricScheduleSchema
-  .omit({ title: true })
-  .extend({
+// ─── Schema ──────────────────────────────────────────────────────────────────
+const formSchema = z
+  .object({
     userId: z.string().min(1, "Vui lòng đăng nhập"),
-    tutorname: z.string().min(1, "Vui lòng nhập tên người dạy"),
-    field: z.string().min(1, "Vui lòng nhập lĩnh vực"),
-    subject: z.string().min(1, "Vui lòng nhập môn dạy"),
-    Class: z.string().min(1, "Vui lòng nhập lớp"),
-    address: z.string().min(1, "Vui lòng nhập địa chỉ"),
-    method: z.string().min(1, "Vui lòng nhập hình thức"),
+    tutorname: z.string().min(2, "Vui lòng nhập tên người dạy"),
+    field: z.string().min(2, "Vui lòng nhập hoặc chọn lĩnh vực"),
+    subject: z.string().min(2, "Vui lòng nhập môn dạy"),
+    Class: z.string().min(1, "Vui lòng chọn hoặc nhập lớp"),
+    price: z.string().min(1, "Vui lòng nhập học phí"),
+    method: z.enum(["Online", "Offline"]),
+    address: z.string().optional(),
     description: z
       .string()
-      .min(20, "Mô tả ít nhất 20 ký tự")
-      .max(100, "Mô tả tối đa 100 ký tự"),
-    proof: z.string().min(1, "Vui lòng nhập minh chứng"),
+      .min(10, "Mô tả khóa học ít nhất 10 ký tự")
+      .max(500, "Mô tả tối đa 500 ký tự"),
+    proof: z.string().optional(),
+    schedules: z
+      .array(
+        z.object({
+          day: z.string(),
+          startTime: z.string(),
+          endTime: z.string(),
+        })
+      )
+      .min(1, "Vui lòng chọn ít nhất 1 buổi học trong tuần"),
   })
-  .refine((data) => data.schedules.every((s) => s.startTime < s.endTime), {
-    message: "Giờ bắt đầu phải nhỏ hơn giờ kết thúc",
-    path: ["schedules"],
-  });
+  .refine(
+    (data) => {
+      if (
+        data.method === "Offline" &&
+        (!data.address || data.address.trim() === "")
+      ) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Hình thức Offline yêu cầu nhập địa chỉ cụ thể",
+      path: ["address"],
+    }
+  )
+  .refine(
+    (data) => data.schedules.every((s) => s.startTime < s.endTime),
+    {
+      message: "Giờ bắt đầu phải sớm hơn giờ kết thúc",
+      path: ["schedules"],
+    }
+  );
 
 type FormValues = z.infer<typeof formSchema>;
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const DAYS_OF_WEEK = [
   { label: "T2", value: "T2" },
   { label: "T3", value: "T3" },
@@ -83,700 +102,721 @@ const DAYS_OF_WEEK = [
   { label: "CN", value: "CN" },
 ];
 
-const SPRING = { type: "spring" as const, duration: 0.25, bounce: 0.1 };
-const SPRING_BOUNCY = { type: "spring" as const, duration: 0.3, bounce: 0.2 };
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-// Sinh danh sách giờ từ 06:00 đến 22:00
 const TIME_OPTIONS = Array.from({ length: 17 }, (_, i) => {
   const h = (i + 6).toString().padStart(2, "0");
   return `${h}:00`;
 });
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function FileIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-4 w-4 text-muted-foreground"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function UploadIcon({ isDragOver }: { isDragOver: boolean }) {
-  const shouldReduceMotion = useReducedMotion();
-  return (
-    <motion.div
-      animate={
-        shouldReduceMotion
-          ? undefined
-          : isDragOver
-            ? { scale: 1.15, y: -4 }
-            : { scale: 1, y: 0 }
-      }
-      transition={shouldReduceMotion ? { duration: 0 } : SPRING_BOUNCY}
-    >
-      <svg
-        aria-hidden="true"
-        className={cn(
-          "mb-3 h-10 w-10 transition-colors duration-200",
-          isDragOver ? "text-primary" : "text-muted-foreground",
-        )}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </motion.div>
-  );
-}
-
 // ─── Main Component ───────────────────────────────────────────────────────────
 const UpdatePostPage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+  const editId = searchParams.get("id");
+  const isEditing = !!editId;
+
   const { user } = useUser();
   const userId = user?.id;
-  const shouldReduceMotion = useReducedMotion();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dragCounter = useRef(0);
+  const [mounted, setMounted] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    values: {
+    defaultValues: {
       userId: userId || "",
-      subject: "",
-      Class: "",
-      address: "",
-      description: "",
-      method: "",
-      tutorname: "",
+      tutorname: user?.name || "",
       field: "",
+      subject: "",
+      Class: "Lớp 12",
+      price: "250000",
+      method: "Online",
+      address: "Online qua Zoom / Google Meet",
+      description: "",
       proof: "",
-      schedules: [],
+      schedules: [
+        { day: "T2", startTime: "18:00", endTime: "20:00" },
+        { day: "T4", startTime: "18:00", endTime: "20:00" },
+      ],
     },
   });
 
-  useEffect(() => {
-    if (userId) {
-      form.setValue("userId", userId);
-    }
-  }, [userId, form]);
+  // Load existing post if edit mode
+  const { data: existingPost } = useQuery({
+    queryKey: ["post", editId],
+    queryFn: async () => {
+      if (!editId) return null;
+      const res = await PostService.getPost(editId);
+      return res?.data || res;
+    },
+    enabled: !!editId,
+  });
 
-  // FIX 2: useFieldArray dùng đúng form context, không tạo Form lồng nhau
+  useEffect(() => {
+    if (existingPost) {
+      form.reset({
+        userId: userId || "",
+        tutorname:
+          existingPost.tutorname ||
+          existingPost.tutor?.name ||
+          user?.name ||
+          "",
+        field: existingPost.field || "",
+        subject: existingPost.subject || "",
+        Class: existingPost.Class || "Lớp 12",
+        price: String(existingPost.price || "250000"),
+        method:
+          existingPost.method?.toLowerCase() === "offline"
+            ? "Offline"
+            : "Online",
+        address:
+          existingPost.address ||
+          (existingPost.method?.toLowerCase() === "offline"
+            ? ""
+            : "Online qua Zoom / Google Meet"),
+        description: existingPost.description || "",
+        proof: existingPost.proof || "",
+        schedules:
+          existingPost.schedules && existingPost.schedules.length > 0
+            ? existingPost.schedules
+            : [{ day: "T2", startTime: "18:00", endTime: "20:00" }],
+      });
+    } else if (user) {
+      if (!form.getValues("userId")) form.setValue("userId", user.id);
+      if (!form.getValues("tutorname"))
+        form.setValue("tutorname", user.name || "");
+    }
+  }, [existingPost, user, form, userId]);
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "schedules",
   });
 
-  const methodValue = useWatch({ control: form.control, name: "method" });
-  const isOffline = methodValue?.toLowerCase() === "offline";
+  const selectedMethod = form.watch("method");
 
-  // ─── File Handlers ────────────────────────────────────────────────────────
+  const handleMethodChange = (val: "Online" | "Offline") => {
+    form.setValue("method", val, { shouldValidate: true });
+    if (val === "Online") {
+      form.setValue("address", "Online qua Zoom / Google Meet", {
+        shouldValidate: true,
+      });
+    } else {
+      if (form.getValues("address")?.includes("Online")) {
+        form.setValue("address", "", { shouldValidate: true });
+      }
+    }
+  };
+
+  const toggleDay = (dayVal: string) => {
+    const idx = fields.findIndex((item) => item.day === dayVal);
+    if (idx >= 0) {
+      if (fields.length <= 1) {
+        toast.warning("Cần giữ lại ít nhất 1 buổi học");
+        return;
+      }
+      remove(idx);
+    } else {
+      append({ day: dayVal, startTime: "18:00", endTime: "20:00" });
+    }
+  };
+
   const handleFiles = useCallback(
     (newFiles: File[]) => {
       setFileError(null);
       if (newFiles.length === 0) return;
 
-      // Kiểm tra dung lượng từng file
-      const oversized = newFiles.filter((f) => f.size > MAX_FILE_SIZE);
-      if (oversized.length > 0) {
-        setFileError(
-          `File "${oversized[0].name}" vượt quá 10MB. Vui lòng chọn file nhỏ hơn.`,
-        );
+      const oversized = newFiles.find((f) => f.size > MAX_FILE_SIZE);
+      if (oversized) {
+        setFileError(`"${oversized.name}" quá 10MB.`);
         return;
       }
 
-      const updated = [...files, ...newFiles];
-      setFiles(updated);
-      form.setValue("proof", updated.length > 0 ? "has_file" : "", {
-        shouldValidate: true,
+      setFiles((prev) => {
+        const merged = [...prev, ...newFiles];
+        form.setValue("proof", merged.map((f) => f.name).join(", "), {
+          shouldValidate: true,
+        });
+        return merged;
       });
     },
-    [files, form],
+    [form]
   );
 
   const removeFile = useCallback(
-    (index: number) => {
+    (idx: number) => {
       setFiles((prev) => {
-        const updated = prev.filter((_, i) => i !== index);
-        // 👉 Cập nhật lại proof trong RHF khi xóa file
-        form.setValue("proof", updated.length > 0 ? "has_file" : "", {
-          shouldValidate: true,
-        });
+        const updated = prev.filter((_, i) => i !== idx);
+        form.setValue(
+          "proof",
+          updated.length > 0 ? updated.map((f) => f.name).join(", ") : ""
+        );
         return updated;
       });
     },
-    [form],
+    [form]
   );
 
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    dragCounter.current += 1;
-    setIsDragOver(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    dragCounter.current -= 1;
-    if (dragCounter.current === 0) setIsDragOver(false);
-  }, []);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      dragCounter.current = 0;
-      setIsDragOver(false);
-      handleFiles(Array.from(e.dataTransfer.files));
-    },
-    [handleFiles],
-  );
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleFiles(e.target.files ? Array.from(e.target.files) : []);
-    if (inputRef.current) inputRef.current.value = "";
-  };
-
-  const Ppostmutation = useMutation({
-    mutationFn: async (data: FormData) => {
-      const res = await PostService.createPost(data);
-      return res;
+  const postMutation = useMutation({
+    mutationFn: async (payload: FormValues) => {
+      if (isEditing && editId) {
+        return await PostService.updatePost(editId, JSON.stringify(payload));
+      } else {
+        return await PostService.createPost(payload);
+      }
     },
     onSuccess: () => {
-      toast.success("Đăng duyệt thành công");
-      form.reset();
-      setFiles([]);
+      queryClient.invalidateQueries({ queryKey: ["postsByUser"] });
+      queryClient.invalidateQueries({ queryKey: ["allPosts"] });
+      queryClient.invalidateQueries({ queryKey: ["post"] });
+      toast.success(
+        isEditing
+          ? "Cập nhật khóa học thành công!"
+          : "Đăng ký khóa học thành công!"
+      );
+      router.push("/qlkh");
     },
     onError: () => {
-      toast.error("Có lỗi xảy ra khi đăng bài!");
+      toast.error("Lưu khóa học thất bại. Vui lòng thử lại!");
     },
   });
-  const isPending = Ppostmutation.isPending;
 
-  function onSubmit(data: FormValues) {
-    // Build FormData để gửi cả text fields lẫn file lên server
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      if (value === null || value === undefined) return;
-
-      // Nếu là File/Blob thì append trực tiếp, không stringify
-      if (value instanceof File || value instanceof Blob) {
-        formData.append(key, value);
-      } else if (typeof value === "object") {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, String(value));
-      }
-    });
-    files.forEach((file) => formData.append("files", file));
-    Ppostmutation.mutate(formData);
-  }
-
-  const toggleDay = (dayValue: string) => {
-    const index = fields.findIndex((item) => item.day === dayValue);
-    if (index >= 0) remove(index);
-    else append({ day: dayValue, startTime: "18:00", endTime: "20:00" });
+  const onSubmit = (values: FormValues) => {
+    postMutation.mutate(values);
   };
 
-  // ─── Render ───────────────────────────────────────────────────────────────
-  return (
-    <div className={style.main}>
-      <div className={style.title}>
-        <h1 className="text-2xl font-bold border-b border-black">
-          Đăng Khóa Học
-        </h1>
+  if (!mounted) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-slate-50/50">
+        <Loader2 className="size-5 animate-spin text-zinc-500" />
       </div>
-      <div className={style.body}>
-        <h1 className="text-xl border-b border-gray">Nhập thông tin khóa</h1>
-        <Card className="w-full overflow-y-auto">
-          <CardHeader>
-            <CardDescription>Vui lòng nhập đủ thông tin</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* FormProvider cung cấp context cho FormField bên trong */}
-            <FormProvider {...form}>
-              <form
-                id="form-rhf-demo"
-                onSubmit={form.handleSubmit(onSubmit, (errors) =>
-                  console.log("Validation errors:", errors),
-                )}
-              >
-                <FieldGroup>
-                  {/* Tên người dạy + Lĩnh vực */}
-                  <div className={style.input}>
-                    <Controller
-                      name="tutorname"
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <Field>
-                          <FieldLabel>Tên người dạy</FieldLabel>
-                          <Input
-                            {...field}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Nguyễn Văn A"
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                    <Controller
-                      name="field"
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <Field>
-                          <FieldLabel>Lĩnh vực</FieldLabel>
-                          <Input
-                            {...field}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Toán, Lý, Hoá..."
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                  </div>
+    );
+  }
 
-                  {/* Tên môn dạy + Lớp */}
-                  <div className={style.input}>
-                    <Controller
-                      name="subject"
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <Field>
-                          <FieldLabel>Tên môn dạy</FieldLabel>
-                          <Input
-                            {...field}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Toán"
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                    <Controller
-                      name="Class"
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <Field>
-                          <FieldLabel>Lớp</FieldLabel>
-                          <Input
-                            {...field}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Lớp 10"
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
-                    />
-                  </div>
+  // Learner Role Guard
+  if (user && user.role?.toLowerCase() === "learner") {
+    return (
+      <div className="min-h-[calc(100vh-80px)] bg-slate-50/50 py-12 px-4 flex items-center justify-center">
+        <Card className="max-w-md w-full p-6 text-center space-y-4 border border-zinc-200/90 shadow-2xs bg-white rounded-2xl">
+          <div className="mx-auto w-12 h-12 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center">
+            <ShieldAlert className="size-6" />
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-base font-bold text-zinc-800">Chỉ dành cho Gia sư</h2>
+            <p className="text-xs text-zinc-500">
+              Trang đăng khóa học chỉ áp dụng cho tài khoản Gia sư.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 pt-2">
+            <Button
+              onClick={() => router.push("/profile")}
+              className="w-full bg-zinc-800 hover:bg-zinc-700 text-zinc-50 text-xs font-medium h-9 rounded-lg"
+            >
+              Nâng cấp lên Gia sư tại Profile
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => router.push("/")}
+              className="w-full text-xs h-9 rounded-lg text-zinc-600"
+            >
+              Về trang chủ
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
-                  {/* Hình thức */}
-                  <Controller
-                    name="method"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field>
-                        <FieldLabel>Hình thức</FieldLabel>
-                        <Input
-                          {...field}
-                          aria-invalid={fieldState.invalid}
-                          placeholder="Online / Offline"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  {isOffline && (
-                    <Controller
-                      name="address"
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <Field>
-                          <FieldLabel>Địa chỉ</FieldLabel>
-                          <Input
-                            {...field}
-                            aria-invalid={fieldState.invalid}
-                            placeholder="Địa chỉ"
-                          />
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </Field>
-                      )}
+  return (
+    <div className="min-h-[calc(100vh-80px)] bg-slate-50/50 py-6 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
+        {/* Single Unified Card */}
+        <Card className="bg-white border border-zinc-200/90 rounded-2xl shadow-xs p-5 sm:p-7 space-y-6">
+          {/* Header row */}
+          <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-[#edf3ee] text-[#2f4f38] border border-[#d5e2d7] rounded-xl shrink-0">
+                <GraduationCap className="size-5" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-zinc-800 tracking-tight">
+                  {isEditing ? "Cập nhật khóa học" : "Đăng ký khóa học mới"}
+                </h1>
+                <p className="text-xs text-zinc-500">
+                  Điền các thông tin để tạo lớp và tìm kiếm học viên
+                </p>
+              </div>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.back()}
+              className="text-xs text-zinc-500 hover:text-zinc-800 gap-1 px-2.5 h-8 rounded-lg cursor-pointer"
+            >
+              <ArrowLeft className="size-3.5" />
+              <span>Quay lại</span>
+            </Button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            {/* Row 1: Tên gia sư & Lĩnh vực */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Họ và tên gia sư <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="tutorname"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Nguyễn Văn A"
+                      className="h-9 text-xs border-zinc-200 focus-visible:ring-zinc-700 rounded-lg"
                     />
                   )}
+                />
+                {form.formState.errors.tutorname && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.tutorname.message}
+                  </p>
+                )}
+              </div>
 
-                  {/* Thời gian */}
-                  <div className="flex w-full flex-col gap-2">
-                    <label className="text-sm font-medium">Thời gian</label>
-                    <div className="space-y-6 mt-2">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">
-                          Chọn các thứ học trong tuần
-                        </label>
-                        <div className="flex flex-wrap gap-2">
-                          {DAYS_OF_WEEK.map((d) => {
-                            const isSelected = fields.some(
-                              (item) => item.day === d.value,
-                            );
-                            return (
-                              <Button
-                                key={d.value}
-                                type="button"
-                                variant={isSelected ? "default" : "outline"}
-                                className="w-10 h-10 rounded-full font-semibold"
-                                onClick={() => toggleDay(d.value)}
-                              >
-                                {d.label}
-                              </Button>
-                            );
-                          })}
-                        </div>
-                        {form.formState.errors.schedules?.root && (
-                          <p className="text-sm font-medium text-destructive">
-                            {form.formState.errors.schedules.root.message}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-3">
-                        <label className="text-sm font-medium">
-                          Cấu hình khung giờ từng buổi
-                        </label>
-                        {fields.map((field, index) => (
-                          <div
-                            key={field.id}
-                            className="flex items-center justify-between p-3 bg-muted/40 rounded-lg border"
-                          >
-                            <span className="font-bold text-primary w-10">
-                              {field.day}
-                            </span>
-                            <div className="flex items-center gap-2">
-                              <FormField
-                                control={form.control}
-                                name={`schedules.${index}.startTime`}
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      value={field.value}
-                                    >
-                                      <SelectTrigger className="w-[100px] h-8 text-xs">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        {TIME_OPTIONS.map((t) => (
-                                          <SelectItem key={t} value={t}>
-                                            {t}
-                                          </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <span className="text-xs text-muted-foreground">
-                                -
-                              </span>
-                              <FormField
-                                control={form.control}
-                                name={`schedules.${index}.endTime`}
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      value={field.value}
-                                    >
-                                      <SelectTrigger className="w-[100px] h-8 text-xs">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        {TIME_OPTIONS.map((t) => (
-                                          <SelectItem key={t} value={t}>
-                                            {t}
-                                          </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Lĩnh vực <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="field"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="vd: Tự nhiên, Ngoại ngữ..."
+                      className="h-9 text-xs border-zinc-200 focus-visible:ring-zinc-700 rounded-lg"
+                    />
+                  )}
+                />
+                {form.formState.errors.field && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.field.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-                  {/* Mô tả */}
+            {/* Row 2: Môn học, Khối lớp & Học phí */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Tên môn dạy <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="subject"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="vd: Toán 12, Tiếng Anh..."
+                      className="h-9 text-xs border-zinc-200 focus-visible:ring-zinc-700 rounded-lg"
+                    />
+                  )}
+                />
+                {form.formState.errors.subject && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.subject.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Khối lớp <span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="Class"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="h-9 text-xs border-zinc-200 focus-visible:ring-zinc-700 rounded-lg">
+                        <SelectValue placeholder="Chọn lớp" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Lớp 10">Lớp 10</SelectItem>
+                        <SelectItem value="Lớp 11">Lớp 11</SelectItem>
+                        <SelectItem value="Lớp 12">Lớp 12</SelectItem>
+                        <SelectItem value="Đại học">Đại học</SelectItem>
+                        <SelectItem value="Mọi lứa tuổi">Mọi lứa tuổi</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {form.formState.errors.Class && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.Class.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Học phí / tháng <span className="text-red-500">*</span>
+                </Label>
+                <div className="relative">
                   <Controller
-                    name="description"
+                    name="price"
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="form-rhf-demo-description">
-                          Mô tả
-                        </FieldLabel>
-                        <InputGroup>
-                          <InputGroupTextarea
-                            {...field}
-                            id="form-rhf-demo-description"
-                            placeholder="Mô tả khóa học..."
-                            rows={6}
-                            className="min-h-24 resize-none"
-                          />
-                          <InputGroupAddon align="block-end">
-                            <InputGroupText className="tabular-nums">
-                              {field.value?.length || 0}/100 ký tự
-                            </InputGroupText>
-                          </InputGroupAddon>
-                        </InputGroup>
-                        <FieldDescription>
-                          Cảm ơn bạn đã chia sẻ thông tin
-                        </FieldDescription>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        type="number"
+                        step="10000"
+                        placeholder="250000"
+                        className="h-9 text-xs pr-14 border-zinc-200 focus-visible:ring-zinc-700 rounded-lg font-medium"
+                      />
                     )}
                   />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] text-zinc-400">
+                    đ/tháng
+                  </span>
+                </div>
+                {form.formState.errors.price && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.price.message}
+                  </p>
+                )}
+              </div>
+            </div>
 
-                  {/* Upload Minh Chứng */}
-                  <div className={cn("w-full space-y-3")}>
-                    <Field>
-                      <FieldLabel>Upload Minh Chứng</FieldLabel>
-                    </Field>
-                    <motion.div
-                      animate={
-                        shouldReduceMotion
-                          ? undefined
-                          : isDragOver
-                            ? { scale: 1.02 }
-                            : { scale: 1 }
-                      }
-                      aria-label="Kéo thả file hoặc nhấn để chọn"
-                      className={cn(
-                        "relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-6 py-10",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                        "transition-colors duration-200",
-                        isDragOver
-                          ? "border-primary bg-primary/5"
-                          : "border-muted-foreground/25 hover:border-muted-foreground/40 hover:bg-muted/30",
-                      )}
-                      onClick={() => inputRef.current?.click()}
-                      onDragEnter={handleDragEnter}
-                      onDragLeave={handleDragLeave}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
-                      onKeyDown={(e) =>
-                        (e.key === "Enter" || e.key === " ") &&
-                        inputRef.current?.click()
-                      }
-                      role="button"
-                      tabIndex={0}
-                      transition={shouldReduceMotion ? { duration: 0 } : SPRING}
-                    >
-                      <input
-                        accept="image/*,.pdf"
-                        className="sr-only"
-                        multiple
-                        onChange={handleInputChange}
-                        ref={inputRef}
-                        type="file"
-                      />
-                      <UploadIcon isDragOver={isDragOver} />
-                      <AnimatePresence initial={false} mode="wait">
-                        {
-                          <motion.p
-                            key={isDragOver ? "drag" : "idle"}
-                            animate={
-                              shouldReduceMotion
-                                ? { opacity: 1 }
-                                : { opacity: 1, y: 0 }
-                            }
-                            initial={
-                              shouldReduceMotion
-                                ? { opacity: 0 }
-                                : { opacity: 0, y: 4 }
-                            }
-                            exit={
-                              shouldReduceMotion
-                                ? { opacity: 0 }
-                                : { opacity: 0, y: -4 }
-                            }
-                            transition={
-                              shouldReduceMotion ? { duration: 0 } : SPRING
-                            }
-                            className="font-medium text-foreground text-sm"
-                          >
-                            {isDragOver
-                              ? "Thả file vào đây"
-                              : "Kéo thả hoặc nhấn để chọn file"}
-                          </motion.p>
-                        }
-                      </AnimatePresence>
-                      <p className="mt-1 text-muted-foreground text-xs">
-                        Ảnh, PDF • Tối đa 10MB mỗi file
-                      </p>
-                    </motion.div>
-
-                    <AnimatePresence>
-                      {fileError && (
-                        <motion.p
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-destructive text-sm"
-                          exit={{ opacity: 0, y: -4 }}
-                          initial={{ opacity: 0, y: 4 }}
-                          role="alert"
-                          transition={SPRING}
-                        >
-                          {fileError}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-
-                    {files.length > 0 && (
-                      <ul aria-label="File đã chọn" className="space-y-2">
-                        <AnimatePresence initial={false}>
-                          {files.map((file, index) => (
-                            <motion.li
-                              animate={
-                                shouldReduceMotion
-                                  ? { opacity: 1 }
-                                  : { opacity: 1, x: 0, scale: 1 }
-                              }
-                              className="flex items-center gap-3 rounded-md border bg-muted/50 px-3 py-2"
-                              exit={
-                                shouldReduceMotion
-                                  ? { opacity: 0 }
-                                  : {
-                                    opacity: 0,
-                                    x: 24,
-                                    scale: 0.95,
-                                    transition: { duration: 0.15 },
-                                  }
-                              }
-                              initial={
-                                shouldReduceMotion
-                                  ? { opacity: 0 }
-                                  : { opacity: 0, x: -16, scale: 0.95 }
-                              }
-                              key={`${file.name}-${file.size}-${file.lastModified}`}
-                              layout={!shouldReduceMotion}
-                              transition={
-                                shouldReduceMotion ? { duration: 0 } : SPRING
-                              }
-                            >
-                              <FileIcon />
-                              <div className="min-w-0 flex-1">
-                                <p className="truncate font-medium text-foreground text-sm">
-                                  {file.name}
-                                </p>
-                                <p className="text-muted-foreground text-xs">
-                                  {formatFileSize(file.size)}
-                                </p>
-                              </div>
-                              <motion.button
-                                aria-label={`Xoá ${file.name}`}
-                                className="shrink-0 rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  removeFile(index);
-                                }}
-                                type="button"
-                                whileHover={
-                                  shouldReduceMotion
-                                    ? undefined
-                                    : { scale: 1.1 }
-                                }
-                                whileTap={
-                                  shouldReduceMotion
-                                    ? undefined
-                                    : { scale: 0.9 }
-                                }
-                              >
-                                <svg
-                                  aria-hidden="true"
-                                  className="h-4 w-4"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth={2}
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    d="M6 18L18 6M6 6l12 12"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </motion.button>
-                            </motion.li>
-                          ))}
-                        </AnimatePresence>
-                      </ul>
+            {/* Row 3: Hình thức & Địa chỉ */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
+              <div className="space-y-1 sm:col-span-1">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Hình thức <span className="text-red-500">*</span>
+                </Label>
+                <div className="grid grid-cols-2 gap-1.5 p-1 bg-zinc-100/80 rounded-lg">
+                  <button
+                    type="button"
+                    onClick={() => handleMethodChange("Online")}
+                    className={cn(
+                      "h-7 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1 cursor-pointer",
+                      selectedMethod === "Online"
+                        ? "bg-white text-zinc-900 shadow-2xs font-semibold"
+                        : "text-zinc-500 hover:text-zinc-800"
                     )}
+                  >
+                    <Laptop className="size-3" />
+                    <span>Online</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleMethodChange("Offline")}
+                    className={cn(
+                      "h-7 rounded-md text-xs font-medium transition-all flex items-center justify-center gap-1 cursor-pointer",
+                      selectedMethod === "Offline"
+                        ? "bg-white text-zinc-900 shadow-2xs font-semibold"
+                        : "text-zinc-500 hover:text-zinc-800"
+                    )}
+                  >
+                    <MapPin className="size-3" />
+                    <span>Offline</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-1 sm:col-span-2">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  {selectedMethod === "Online" ? "Nền tảng học trực tuyến" : "Địa chỉ dạy học"}{" "}
+                  {selectedMethod === "Offline" && <span className="text-red-500">*</span>}
+                </Label>
+                <Controller
+                  name="address"
+                  control={form.control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder={
+                        selectedMethod === "Online"
+                          ? "Online qua Zoom / Google Meet"
+                          : "Số nhà, tên đường, quận/huyện..."
+                      }
+                      className="h-9 text-xs border-zinc-200 focus-visible:ring-zinc-700 rounded-lg"
+                    />
+                  )}
+                />
+                {form.formState.errors.address && (
+                  <p className="text-[11px] text-red-500">
+                    {form.formState.errors.address.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Row 4: Lịch học trong tuần */}
+            <div className="space-y-2 pt-1 border-t border-zinc-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Lịch học ({fields.length} buổi):
+                </Label>
+                <div className="flex items-center gap-1">
+                  {DAYS_OF_WEEK.map((d) => {
+                    const isSelected = fields.some((item) => item.day === d.value);
+                    return (
+                      <button
+                        key={d.value}
+                        type="button"
+                        onClick={() => toggleDay(d.value)}
+                        className={cn(
+                          "size-7 rounded-md text-[11px] font-medium transition-all cursor-pointer border",
+                          isSelected
+                            ? "bg-zinc-800 text-zinc-50 border-zinc-800 shadow-2xs"
+                            : "bg-white hover:bg-zinc-50 text-zinc-600 border-zinc-200"
+                        )}
+                      >
+                        {d.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Time pickers list */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {fields.map((fieldItem, index) => (
+                  <div
+                    key={fieldItem.id}
+                    className="flex items-center justify-between px-3 py-1.5 bg-zinc-50 border border-zinc-200/90 rounded-lg"
+                  >
+                    <Badge
+                      variant="outline"
+                      className="bg-[#edf3ee] text-[#2f4f38] border-[#d5e2d7] font-bold text-xs px-2 py-0.5 rounded"
+                    >
+                      {fieldItem.day}
+                    </Badge>
+
+                    <div className="flex items-center gap-1.5">
+                      <Controller
+                        control={form.control}
+                        name={`schedules.${index}.startTime`}
+                        render={({ field }) => (
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <SelectTrigger className="w-[78px] h-7 text-xs bg-white rounded border-zinc-200 px-2">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {TIME_OPTIONS.map((t) => (
+                                <SelectItem key={t} value={t} className="text-xs">
+                                  {t}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+
+                      <span className="text-xs text-zinc-400">→</span>
+
+                      <Controller
+                        control={form.control}
+                        name={`schedules.${index}.endTime`}
+                        render={({ field }) => (
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <SelectTrigger className="w-[78px] h-7 text-xs bg-white rounded border-zinc-200 px-2">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {TIME_OPTIONS.map((t) => (
+                                <SelectItem key={t} value={t} className="text-xs">
+                                  {t}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => remove(index)}
+                        className="size-7 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded cursor-pointer"
+                      >
+                        <Trash2 className="size-3" />
+                      </Button>
+                    </div>
                   </div>
-                </FieldGroup>
-              </form>
-            </FormProvider>
-          </CardContent>
-          <CardFooter>
-            <Field orientation="horizontal" className="justify-end gap-5">
+                ))}
+              </div>
+              {form.formState.errors.schedules?.message && (
+                <p className="text-[11px] text-red-500">
+                  {form.formState.errors.schedules.message}
+                </p>
+              )}
+            </div>
+
+            {/* Row 5: Giới thiệu khóa học */}
+            <div className="space-y-1 pt-1 border-t border-zinc-100">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-semibold text-zinc-700">
+                  Mô tả khóa học <span className="text-red-500">*</span>
+                </Label>
+                <span className="text-[11px] text-zinc-400">
+                  {form.watch("description")?.length || 0}/500 ký tự
+                </span>
+              </div>
+              <Controller
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <Textarea
+                    {...field}
+                    placeholder="Mô tả tóm tắt nội dung chương trình, phương pháp giảng dạy và mục tiêu đầu ra..."
+                    rows={3}
+                    maxLength={500}
+                    className="text-xs leading-relaxed border-zinc-200 focus-visible:ring-zinc-700 rounded-lg resize-none"
+                  />
+                )}
+              />
+              {form.formState.errors.description && (
+                <p className="text-[11px] text-red-500">
+                  {form.formState.errors.description.message}
+                </p>
+              )}
+            </div>
+
+            {/* Row 6: Minh chứng đính kèm (Compact strip) */}
+            <div className="space-y-1.5 pt-1 border-t border-zinc-100">
+              <Label className="text-xs font-semibold text-zinc-700">
+                Minh chứng chuyên môn / Bằng cấp (nếu có)
+              </Label>
+              <div
+                onClick={() => inputRef.current?.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                  handleFiles(Array.from(e.dataTransfer.files));
+                }}
+                className={cn(
+                  "border border-dashed rounded-lg p-3 text-center cursor-pointer transition-colors flex items-center justify-center gap-2",
+                  isDragOver
+                    ? "border-emerald-600 bg-emerald-50/40"
+                    : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
+                )}
+              >
+                <input
+                  ref={inputRef}
+                  type="file"
+                  multiple
+                  accept="image/*,.pdf"
+                  className="hidden"
+                  onChange={(e) =>
+                    handleFiles(
+                      e.target.files ? Array.from(e.target.files) : []
+                    )
+                  }
+                />
+                <UploadCloud className="size-4 text-zinc-500" />
+                <span className="text-xs text-zinc-600 font-medium">
+                  Kéo thả hoặc nhấn để chọn file ảnh/PDF
+                </span>
+                <span className="text-[11px] text-zinc-400">(&lt; 10MB)</span>
+              </div>
+
+              {fileError && <p className="text-[11px] text-red-500">{fileError}</p>}
+
+              {files.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {files.map((file, idx) => (
+                    <div
+                      key={`${file.name}-${idx}`}
+                      className="flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-zinc-50 border border-zinc-200 rounded-md text-xs text-zinc-700"
+                    >
+                      <FileText className="size-3 text-zinc-500" />
+                      <span className="truncate max-w-[150px] font-medium text-[11px]">
+                        {file.name}
+                      </span>
+                      <span className="text-[10px] text-zinc-400">
+                        ({formatFileSize(file.size)})
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFile(idx);
+                        }}
+                        className="text-zinc-400 hover:text-red-600 p-0.5 rounded cursor-pointer"
+                      >
+                        <X className="size-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Row 7: Action Footer */}
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100">
               <Button
                 type="button"
                 variant="outline"
+                size="sm"
                 onClick={() => {
                   form.reset();
                   setFiles([]);
                 }}
+                className="h-9 px-4 text-xs text-zinc-600 border-zinc-200 hover:bg-zinc-100 rounded-lg cursor-pointer"
               >
-                Reset
+                Đặt lại
               </Button>
-              <Button type="submit" form="form-rhf-demo" disabled={isPending}>
-                {isPending ? "Đang đăng..." : "Submit"}
+
+              <Button
+                type="submit"
+                size="sm"
+                disabled={postMutation.isPending}
+                className="bg-zinc-800 hover:bg-zinc-700 text-zinc-50 text-xs font-semibold h-9 px-5 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer"
+              >
+                {postMutation.isPending ? (
+                  <>
+                    <Loader2 className="size-3.5 animate-spin" />
+                    <span>Đang lưu...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="size-3.5" />
+                    <span>{isEditing ? "Lưu thay đổi" : "Đăng khóa học"}</span>
+                  </>
+                )}
               </Button>
-            </Field>
-          </CardFooter>
+            </div>
+          </form>
         </Card>
       </div>
     </div>

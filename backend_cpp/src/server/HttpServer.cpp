@@ -175,6 +175,9 @@ static string formatSinglePostJson(const TutorPost& post, const AuthService& aut
     string classStr = post.getClassGrade().empty() ? ("Lớp " + to_string(post.getGrade())) : post.getClassGrade();
     string addrStr = post.getAddress().empty() ? "Đà Nẵng" : post.getAddress();
 
+    double avgRating = tutorService.getAverageRating(tId);
+    int revCount = tutorService.getReviewCount(tId);
+
     ostringstream json;
     json << "{"
          << "\"id\":\"" << post.getId() << "\","
@@ -187,6 +190,8 @@ static string formatSinglePostJson(const TutorPost& post, const AuthService& aut
          << "\"method\":\"" << modeStr << "\","
          << "\"mode\":\"" << modeStr << "\","
          << "\"price\":" << post.getTuitionPerHour() << ","
+         << "\"rating\":" << avgRating << ","
+         << "\"reviewCount\":" << revCount << ","
          << "\"address\":\"" << escapeJsonString(addrStr) << "\","
          << "\"proof\":\"" << escapeJsonString(proofImg) << "\","
          << "\"field\":\"Giáo dục\","
@@ -196,6 +201,8 @@ static string formatSinglePostJson(const TutorPost& post, const AuthService& aut
              << "\"name\":\"" << escapeJsonString(name) << "\","
              << "\"phone\":\"" << escapeJsonString(phone) << "\","
              << "\"avatar\":\"" << escapeJsonString(proofImg) << "\","
+             << "\"rating\":" << avgRating << ","
+             << "\"reviewCount\":" << revCount << ","
              << "\"description\":\"" << escapeJsonString(desc) << "\","
              << "\"user\":{"
                  << "\"id\":\"" << tId << "\","
@@ -221,11 +228,77 @@ static string buildPostsJson(const vector<TutorPost>& posts, const AuthService& 
     return json.str();
 }
 
+static string formatCourseApplicationJson(const Application& a, const PostService& postService, const AuthService& authService, const TutorService& tutorService) {
+    auto postOpt = postService.getPostById(a.getPostId());
+    string subject = "Toán học";
+    string classGrade = a.getClassName().empty() ? "Lớp 12" : (a.getClassName().rfind("Lớp", 0) == 0 ? a.getClassName() : "Lớp " + a.getClassName());
+    string method = "Online";
+    int price = 150000;
+    string address = "Đà Nẵng";
+    string proof = "https://bizweb.dktcdn.net/100/255/283/themes/588445/assets/cate_2_2.jpg?1786698433736";
+    int tutorId = a.getTutorId();
+    string tutorName = "Châu Việt Kiên";
+
+    if (postOpt.has_value()) {
+        subject = postOpt->getSubjectName();
+        if (postOpt->getClassGrade().empty()) {
+            classGrade = "Lớp " + to_string(postOpt->getGrade());
+        } else {
+            classGrade = postOpt->getClassGrade();
+        }
+        method = (postOpt->getMode() == TeachingMode::ONLINE) ? "Online" : "Offline";
+        price = postOpt->getTuitionPerHour();
+        if (!postOpt->getAddress().empty()) address = postOpt->getAddress();
+        if (!postOpt->getProof().empty()) proof = postOpt->getProof();
+        tutorId = postOpt->getTutorId();
+    }
+
+    vector<User> allUsers = authService.getAllUsers();
+    for (const auto& u : allUsers) {
+        if (u.getId() == tutorId) {
+            tutorName = u.getFullName();
+            break;
+        }
+    }
+
+    ostringstream json;
+    json << "{"
+         << "\"id\":\"" << a.getId() << "\","
+         << "\"subject\":\"" << escapeJsonString(subject) << "\","
+         << "\"format\":\"" << escapeJsonString(method) << "\","
+         << "\"tutor_name\":\"" << escapeJsonString(tutorName) << "\","
+         << "\"class\":\"" << escapeJsonString(classGrade) << "\","
+         << "\"status\":\"approved\","
+         << "\"studentName\":\"" << escapeJsonString(a.getName()) << "\","
+         << "\"studentEmail\":\"" << escapeJsonString(a.getEmail()) << "\","
+         << "\"studentPhone\":\"" << escapeJsonString(a.getPhone()) << "\","
+         << "\"note\":\"" << escapeJsonString(a.getNote()) << "\","
+         << "\"schedule\":["
+             << "{\"id\":\"1\",\"day\":\"Thứ 2\",\"startTime\":\"18:00\",\"endTime\":\"20:00\"},"
+             << "{\"id\":\"2\",\"day\":\"Thứ 4\",\"startTime\":\"18:00\",\"endTime\":\"20:00\"}"
+         << "],"
+         << "\"post\":{"
+             << "\"subject\":\"" << escapeJsonString(subject) << "\","
+             << "\"Class\":\"" << escapeJsonString(classGrade) << "\","
+             << "\"method\":\"" << escapeJsonString(method) << "\","
+             << "\"price\":\"" << price << " đ/buổi\","
+             << "\"address\":\"" << escapeJsonString(address) << "\","
+             << "\"proof\":\"" << escapeJsonString(proof) << "\","
+             << "\"tutor\":{\"name\":\"" << escapeJsonString(tutorName) << "\"},"
+             << "\"schedules\":["
+                 << "{\"id\":\"1\",\"day\":\"Thứ 2\",\"startTime\":\"18:00\",\"endTime\":\"20:00\"},"
+                 << "{\"id\":\"2\",\"day\":\"Thứ 4\",\"startTime\":\"18:00\",\"endTime\":\"20:00\"}"
+             << "]"
+         << "}"
+         << "}";
+    return json.str();
+}
+
 HttpServer::HttpServer(int port, AuthService& auth, TutorService& tutor,
-                       PostService& post, BookingService& booking, FileManager& fm)
+                       PostService& post, ApplicationService& appService, FileManager& fm)
     : port(port), serverFd(-1), isRunning(false),
       authService(auth), tutorService(tutor),
-      postService(post), bookingService(booking), fileManager(fm) {}
+      postService(post), applicationService(appService), fileManager(fm) {}
 
 HttpServer::~HttpServer() {
     stop();
@@ -432,11 +505,43 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
         return HttpResponse(200, "application/json", buildPostsJson(posts, authService, tutorService));
     }
 
+    // GET top recommended posts (MaxHeap Priority Queue)
+    if (req.method == "GET" && (req.path == "/api/tutor-post/top-recommended" || req.path == "/api/top-recommended")) {
+        int limit = 4;
+        if (req.queryParams.count("limit")) {
+            try { limit = stoi(req.queryParams.at("limit")); } catch (...) {}
+        }
+        vector<TutorPost> topPosts = postService.getTopRecommended(limit);
+        return HttpResponse(200, "application/json", buildPostsJson(topPosts, authService, tutorService));
+    }
+
+    // GET recently viewed posts (Deque LRU Cache)
+    if (req.method == "GET" && (req.path == "/api/tutor-post/recently-viewed" || req.path == "/api/recently-viewed")) {
+        int limit = 4;
+        if (req.queryParams.count("limit")) {
+            try { limit = stoi(req.queryParams.at("limit")); } catch (...) {}
+        }
+        vector<TutorPost> recents = postService.getRecentlyViewed(limit);
+        return HttpResponse(200, "application/json", buildPostsJson(recents, authService, tutorService));
+    }
+
+    // POST record view (Deque)
+    if (req.method == "POST" && req.path.rfind("/api/tutor-post/record-view/", 0) == 0) {
+        string idStr = req.path.substr(string("/api/tutor-post/record-view/").length());
+        try {
+            int pId = stoi(idStr);
+            postService.recordRecentlyViewed(pId);
+            return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"View recorded\"}");
+        } catch (...) {}
+        return HttpResponse(400, "application/json", "{\"status\":\"ERR\",\"message\":\"Invalid ID\"}");
+    }
+
     // GET post detail
     if (req.method == "GET" && req.path.rfind("/api/tutor-post/get-post/", 0) == 0) {
         string idStr = req.path.substr(string("/api/tutor-post/get-post/").length());
         try {
             int pId = stoi(idStr);
+            postService.recordRecentlyViewed(pId);
             auto opt = postService.getPostById(pId);
             if (opt.has_value()) {
                 string postJson = formatSinglePostJson(*opt, authService, tutorService);
@@ -465,10 +570,22 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
         long long price = priceStr.empty() ? 200000 : stoll(priceStr);
         string desc = extractJsonValue(req.body, "description");
         string address = extractJsonValue(req.body, "address");
-        string errMsg;
+        string uIdStr = extractJsonValue(req.body, "userId");
+        int tutorId = 1;
+        try { if (!uIdStr.empty()) tutorId = stoi(uIdStr); } catch (...) { tutorId = 1; }
 
+        int gradeNum = 12;
+        for (size_t i = 0; i < classGrade.size(); ++i) {
+            if (isdigit(classGrade[i])) {
+                try { gradeNum = stoi(classGrade.substr(i)); } catch (...) {}
+                break;
+            }
+        }
+        if (gradeNum < 1 || gradeNum > 12) gradeNum = 12;
+
+        string errMsg;
         TeachingMode mode = (methodStr == "Online" || methodStr == "ONLINE") ? TeachingMode::ONLINE : TeachingMode::OFFLINE;
-        postService.createPost(1, subject, desc, subject, 12, price, mode, {address}, "Thứ 2 & Thứ 4", errMsg);
+        postService.createPost(tutorId, subject, desc, subject, gradeNum, price, mode, {address}, "Thứ 2 & Thứ 4", errMsg);
 
         fileManager.saveTutorPosts(postService.getAllActivePosts());
         return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Create post success!\",\"data\":{\"id\":\"99\"}}");
@@ -492,11 +609,10 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
     // ==========================================
     // 2. SEARCH & FILTER APIS (TRIE & BST)
     // ==========================================
-
-    // Autocomplete (Trie)
+    // Autocomplete (Trie: Subjects + Tutor Names)
     if (req.method == "GET" && req.path == "/api/autocomplete") {
         string q = req.queryParams.count("q") ? req.queryParams.at("q") : "";
-        vector<string> suggestions = postService.suggestSubjects(q);
+        vector<string> suggestions = postService.suggest(q);
         ostringstream oss;
         oss << "{\"status\":\"OK\",\"success\":true,\"data\":[";
         for (size_t i = 0; i < suggestions.size(); ++i) {
@@ -507,27 +623,41 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
         return HttpResponse(200, "application/json", oss.str());
     }
 
-    // Search by subject name (Trie + Fallback Accent Normalization)
+    // Search by subject name or tutor name (Trie + Fallback Accent Normalization)
     if (req.method == "GET" && req.path == "/api/search") {
         string q = req.queryParams.count("q") ? req.queryParams.at("q") : "";
         vector<TutorPost> posts;
         if (q.empty()) {
             posts = postService.getAllActivePosts();
         } else {
-            posts = postService.searchBySubject(q);
+            posts = postService.search(q);
             if (posts.empty()) {
                 vector<TutorPost> all = postService.getAllActivePosts();
                 string qAscii = toSimpleAscii(q);
                 string qLower = q;
                 transform(qLower.begin(), qLower.end(), qLower.begin(), ::tolower);
 
+                vector<User> allUsers = authService.getAllUsers();
                 for (const auto& p : all) {
                     string sAscii = toSimpleAscii(p.getSubjectName());
                     string sLower = p.getSubjectName();
                     transform(sLower.begin(), sLower.end(), sLower.begin(), ::tolower);
 
+                    string tName = "";
+                    for (const auto& u : allUsers) {
+                        if (u.getId() == p.getTutorId()) {
+                            tName = u.getFullName();
+                            break;
+                        }
+                    }
+                    string tAscii = toSimpleAscii(tName);
+                    string tLower = tName;
+                    transform(tLower.begin(), tLower.end(), tLower.begin(), ::tolower);
+
                     if (sLower.find(qLower) != string::npos ||
-                        (!qAscii.empty() && sAscii.find(qAscii) != string::npos)) {
+                        (!qAscii.empty() && sAscii.find(qAscii) != string::npos) ||
+                        (!tLower.empty() && tLower.find(qLower) != string::npos) ||
+                        (!qAscii.empty() && !tAscii.empty() && tAscii.find(qAscii) != string::npos)) {
                         posts.push_back(p);
                     }
                 }
@@ -552,6 +682,25 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
 
         // Dung cay BST lay cac bai dang theo khoang gia
         vector<TutorPost> candidates = postService.filterByTuition(minP, maxP);
+
+        // Dung cay BST ratingBST loc tiep theo diem danh gia
+        if (req.queryParams.count("minRating") && !req.queryParams.at("minRating").empty()) {
+            try {
+                double minR = stod(req.queryParams.at("minRating"));
+                int minRKey = (int)(minR * 10);
+                vector<int> ratingCandidateIds = postService.filterByRating(minRKey, 50);
+                Set<int> ratingSet;
+                for (int id : ratingCandidateIds) ratingSet.insert(id);
+
+                vector<TutorPost> ratingFiltered;
+                for (const auto& p : candidates) {
+                    if (ratingSet.contains(p.getId())) {
+                        ratingFiltered.push_back(p);
+                    }
+                }
+                candidates = ratingFiltered;
+            } catch (...) {}
+        }
         vector<TutorPost> filtered;
 
         for (const auto& p : candidates) {
@@ -724,30 +873,121 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
         string name = extractJsonValue(req.body, "name");
         string email = extractJsonValue(req.body, "email");
         string phone = extractJsonValue(req.body, "phone");
+        string className = extractJsonValue(req.body, "className");
+        if (className.empty()) className = extractJsonValue(req.body, "class");
         string note = extractJsonValue(req.body, "note");
-        int pId = postId.empty() ? 1 : stoi(postId);
+        if (note.empty()) note = extractJsonValue(req.body, "introduction");
 
-        int bId = bookingService.createBooking(2, 1, pId, "2026-11-01 18:00", name + " - " + note + " (" + phone + ")");
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Đăng ký thành công!\",\"data\":{\"id\":\"" + to_string(bId) + "\"}}");
+        int pId = 1;
+        try { if (!postId.empty()) pId = stoi(postId); } catch (...) { pId = 1; }
+
+        // Tìm studentId
+        int studentId = 2; // Default student ID (minh_student)
+        auto allUsers = authService.getAllUsers();
+        for (const auto& u : allUsers) {
+            if (!email.empty() && u.getEmail() == email) {
+                studentId = u.getId();
+                break;
+            }
+        }
+
+        // Tìm tutorId và thông tin khóa học từ post
+        auto postOpt = postService.getPostById(pId);
+        int tutorId = postOpt.has_value() ? postOpt->getTutorId() : 1;
+        string subject = postOpt.has_value() ? postOpt->getSubjectName() : "Toán học";
+        string classGrade = className.empty() ? (postOpt.has_value() ? postOpt->getClassGrade() : "12") : className;
+        string method = postOpt.has_value() ? (postOpt->getMode() == TeachingMode::ONLINE ? "Online" : "Offline") : "Offline";
+        string price = postOpt.has_value() ? (to_string(postOpt->getTuitionPerHour()) + " đ/buổi") : "250000 đ/buổi";
+        string address = (postOpt.has_value() && !postOpt->getAddress().empty()) ? postOpt->getAddress() : "Đà Nẵng";
+        string schedule = (postOpt.has_value() && !postOpt->getSchedule().empty()) ? postOpt->getSchedule() : "Thứ 2 & Thứ 4 (18:00 - 20:00)";
+
+        string tutorName = "Châu Việt Kiên";
+        for (const auto& u : allUsers) {
+            if (u.getId() == tutorId) {
+                tutorName = u.getFullName();
+                break;
+            }
+        }
+
+        int aId = applicationService.createApplication(studentId, tutorId, pId, name, email, phone, subject,
+                                                      classGrade, tutorName, method, price, address, schedule, note, "2026-11-05 18:00");
+        fileManager.saveApplications(applicationService.getAllApplications());
+
+        return HttpResponse(200, "application/json", 
+            "{\"status\":\"OK\",\"message\":\"Đăng ký thành công!\",\"data\":{\"id\":\"" + to_string(aId) + "\"}}");
     }
 
     if (req.method == "GET" && req.path == "/api/application/get-all-applications") {
+        vector<Application> all = applicationService.getAllApplications();
         ostringstream oss;
-        oss << "{\"status\":\"OK\",\"data\":["
-            << "{\"id\":\"1\",\"name\":\"Đức Minh\",\"email\":\"minh@gmail.com\",\"phone\":\"0907654321\",\"class\":\"12\",\"note\":\"Ôn thi ĐH\",\"status\":\"approved\",\"postId\":\"1\"},"
-            << "{\"id\":\"2\",\"name\":\"Lê Văn Nam\",\"email\":\"nam@gmail.com\",\"phone\":\"0912345678\",\"class\":\"11\",\"note\":\"Bổ trợ kiến thức\",\"status\":\"pending\",\"postId\":\"2\"}"
-            << "]}";
+        oss << "{\"status\":\"OK\",\"data\":[";
+        for (size_t i = 0; i < all.size(); ++i) {
+            if (i > 0) oss << ",";
+            oss << formatCourseApplicationJson(all[i], postService, authService, tutorService);
+        }
+        oss << "]}";
         return HttpResponse(200, "application/json", oss.str());
     }
 
     if (req.method == "GET" && req.path.rfind("/api/application/get-application/", 0) == 0) {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"data\":{\"id\":\"1\",\"status\":\"approved\"}}");
+        string idStr = req.path.substr(string("/api/application/get-application/").length());
+        int sId = 0;
+        try { sId = stoi(idStr); } catch (...) { sId = 0; }
+
+        vector<Application> apps = applicationService.getApplicationsByStudent(sId);
+        // Fallback: nếu student chưa có booking riêng biệt hoặc sId == 0, lấy toàn bộ application hiện có
+        if (apps.empty()) {
+            apps = applicationService.getAllApplications();
+        }
+
+        ostringstream oss;
+        oss << "{\"status\":\"OK\",\"message\":\"Get application success!\",\"data\":[";
+        for (size_t i = 0; i < apps.size(); ++i) {
+            if (i > 0) oss << ",";
+            oss << formatCourseApplicationJson(apps[i], postService, authService, tutorService);
+        }
+        oss << "]}";
+        return HttpResponse(200, "application/json", oss.str());
     }
 
     if (req.method == "GET" && (req.path.rfind("/api/application/get-applications-by-user/", 0) == 0 ||
-                                req.path.rfind("/api/application/get-by-student/", 0) == 0 ||
-                                req.path.rfind("/api/application/get-by-post/", 0) == 0)) {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"data\":[]}");
+                                req.path.rfind("/api/application/get-by-student/", 0) == 0)) {
+        string prefix = req.path.rfind("/api/application/get-applications-by-user/", 0) == 0
+                        ? "/api/application/get-applications-by-user/"
+                        : "/api/application/get-by-student/";
+        string idStr = req.path.substr(prefix.length());
+        int sId = 0;
+        try { sId = stoi(idStr); } catch (...) { sId = 0; }
+
+        vector<Application> apps = applicationService.getApplicationsByStudent(sId);
+        if (apps.empty()) {
+            apps = applicationService.getAllApplications();
+        }
+
+        ostringstream oss;
+        oss << "{\"status\":\"OK\",\"data\":[";
+        for (size_t i = 0; i < apps.size(); ++i) {
+            if (i > 0) oss << ",";
+            oss << formatCourseApplicationJson(apps[i], postService, authService, tutorService);
+        }
+        oss << "]}";
+        return HttpResponse(200, "application/json", oss.str());
+    }
+
+    if (req.method == "GET" && req.path.rfind("/api/application/get-by-post/", 0) == 0) {
+        string idStr = req.path.substr(string("/api/application/get-by-post/").length());
+        int pId = 0;
+        try { pId = stoi(idStr); } catch (...) { pId = 0; }
+
+        vector<Application> all = applicationService.getApplicationsByPost(pId);
+        ostringstream oss;
+        oss << "{\"status\":\"OK\",\"data\":[";
+        for (size_t i = 0; i < all.size(); ++i) {
+            if (i > 0) oss << ",";
+            oss << formatCourseApplicationJson(all[i], postService, authService, tutorService);
+        }
+        oss << "]}";
+        return HttpResponse(200, "application/json", oss.str());
     }
 
     if (req.method == "PUT" && req.path.rfind("/api/application/update-status/", 0) == 0) {
@@ -755,18 +995,71 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
     }
 
     if (req.method == "DELETE" && req.path.rfind("/api/application/delete-application/", 0) == 0) {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Deleted\"}");
+        string idStr = req.path.substr(string("/api/application/delete-application/").length());
+        int appId = 0;
+        try { appId = stoi(idStr); } catch (...) { appId = 0; }
+        if (appId > 0) {
+            applicationService.deleteApplication(appId);
+            fileManager.saveApplications(applicationService.getAllApplications());
+        }
+        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Hủy đăng ký thành công!\"}");
     }
 
     // ==========================================
     // 6. EVALUATION APIS
     // ==========================================
     if (req.method == "POST" && req.path == "/api/evaluation/create") {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Evaluation created\"}");
+        int tId = 1, sId = 1, rating = 5;
+        string comment = "Đánh giá tốt";
+        try {
+            string tStr = extractJsonValue(req.body, "tutorId");
+            if (!tStr.empty()) tId = stoi(tStr);
+            string sStr = extractJsonValue(req.body, "studentId");
+            if (!sStr.empty()) sId = stoi(sStr);
+            string rStr = extractJsonValue(req.body, "rating");
+            if (!rStr.empty()) rating = stoi(rStr);
+        } catch (...) {}
+        string cStr = extractJsonValue(req.body, "comment");
+        if (!cStr.empty()) comment = cStr;
+
+        Review rev(0, sId, tId, rating, comment, "2026-11-06 11:30");
+        tutorService.addReview(rev);
+        fileManager.saveReviews(tutorService.getAllReviews());
+
+        double newAvg = tutorService.getAverageRating(tId);
+        postService.updateTutorRating(tId, newAvg);
+
+        ostringstream oss;
+        oss << "{\"status\":\"OK\",\"message\":\"Tạo đánh giá thành công!\",\"data\":{"
+            << "\"rating\":" << newAvg << ","
+            << "\"reviewCount\":" << tutorService.getReviewCount(tId)
+            << "}}";
+        return HttpResponse(200, "application/json", oss.str());
     }
     if (req.method == "GET" && (req.path.rfind("/api/evaluation/get-by-post/", 0) == 0 ||
                                 req.path.rfind("/api/evaluation/get-by-tutor/", 0) == 0)) {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"data\":[]}");
+        string prefix = req.path.rfind("/api/evaluation/get-by-post/", 0) == 0
+                        ? "/api/evaluation/get-by-post/"
+                        : "/api/evaluation/get-by-tutor/";
+        string idStr = req.path.substr(prefix.length());
+        int tId = 1;
+        try { tId = stoi(idStr); } catch (...) {}
+        vector<Review> revs = tutorService.getReviewsByTutor(tId);
+        ostringstream oss;
+        oss << "{\"status\":\"OK\",\"data\":[";
+        for (size_t i = 0; i < revs.size(); ++i) {
+            if (i > 0) oss << ",";
+            oss << "{"
+                << "\"id\":" << revs[i].getId() << ","
+                << "\"studentId\":" << revs[i].getStudentId() << ","
+                << "\"tutorId\":" << revs[i].getTutorId() << ","
+                << "\"rating\":" << revs[i].getRating() << ","
+                << "\"comment\":\"" << escapeJsonString(revs[i].getComment()) << "\","
+                << "\"createdAt\":\"" << escapeJsonString(revs[i].getCreatedAt()) << "\""
+                << "}";
+        }
+        oss << "]}";
+        return HttpResponse(200, "application/json", oss.str());
     }
 
     return HttpResponse(404, "application/json", "{\"status\":\"ERR\",\"message\":\"Endpoint not found\"}");

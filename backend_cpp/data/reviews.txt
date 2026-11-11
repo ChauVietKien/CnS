@@ -1,4 +1,5 @@
-1|1|1|2|5|Bài giảng môn Toán học rất chất lượng!
-2|2|1|2|5|Giáo viên dạy IELTS cực kỳ dễ hiểu và chi tiết.
-3|3|1|2|4|Khóa React thực chiến rất hữu ích cho công việc.
-4|4|1|2|5|Thầy giảng lý thuyết Vật lý 11 rất trực quan.
+1|2|1|5|Thầy Kiên dạy Toán và Lập trình cực kỳ dễ hiểu, tận tâm chỉ dẫn từng bài tập khó!|2026-11-01 10:00
+2|2|4|5|Cô Phương Mai sửa bài Writing và Speaking rất chi tiết, phản xạ nói của mình tăng rõ rệt.|2026-11-03 14:30
+3|2|5|5|Thầy Nam dạy Vật lý đi từ bản chất hiện tượng nên nhớ bài rất lâu, không cần học vẹt công thức.|2026-11-05 09:15
+4|2|6|5|Cô Bảo Ngọc hướng dẫn cách lập dàn ý văn nghị luận sắc bén, bài viết tiến bộ vượt bậc.|2026-11-07 16:00
+5|2|1|4|Khóa học chất lượng cao, bài tập sát với đề thi tuyển sinh thực tế.|2026-11-09 20:00

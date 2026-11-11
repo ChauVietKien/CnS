@@ -7,7 +7,7 @@
 #include "../services/AuthService.h"
 #include "../services/TutorService.h"
 #include "../services/PostService.h"
-#include "../services/BookingService.h"
+#include "../services/ApplicationService.h"
 #include "../storage/FileManager.h"
 
 struct HttpRequest {
@@ -37,7 +37,7 @@ private:
     AuthService& authService;
     TutorService& tutorService;
     PostService& postService;
-    BookingService& bookingService;
+    ApplicationService& applicationService;
     FileManager& fileManager;
 
     HttpRequest parseRequest(const std::string& rawRequest);
@@ -48,7 +48,7 @@ private:
 
 public:
     HttpServer(int port, AuthService& auth, TutorService& tutor, 
-               PostService& post, BookingService& booking, FileManager& fm);
+               PostService& post, ApplicationService& appService, FileManager& fm);
     ~HttpServer();
 
     void start();

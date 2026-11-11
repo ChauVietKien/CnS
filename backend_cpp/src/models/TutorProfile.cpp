@@ -5,13 +5,13 @@ using namespace std;
 TutorProfile::TutorProfile()
     : userId(0), dateOfBirth(""), gender(""), address(""), zalo(""), bio(""),
       qualification(""), workplace(""), major(""), experienceYears(0),
-      isApproved(false), rejectReason("") {}
+      isApproved(true), rejectReason("") {}
 
 TutorProfile::TutorProfile(int userId, const string& bio, const string& qualification,
                            const string& workplace, const string& major, int experienceYears)
     : userId(userId), dateOfBirth(""), gender(""), address(""), zalo(""), bio(bio),
       qualification(qualification), workplace(workplace), major(major),
-      experienceYears(experienceYears), isApproved(false), rejectReason("") {}
+      experienceYears(experienceYears), isApproved(true), rejectReason("") {}
 
 int TutorProfile::getUserId() const { return userId; }
 void TutorProfile::setUserId(int id) { userId = id; }

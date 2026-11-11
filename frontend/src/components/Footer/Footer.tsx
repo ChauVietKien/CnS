@@ -1,41 +1,107 @@
-import React from 'react'
-import style from './Footer.module.css'
-import Link from 'next/link'
-import Image from 'next/image'
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Mail, Phone, PhoneCall, ShieldCheck } from "lucide-react";
 
 const Footer = () => {
-    return (
-        <footer className={style.footerContainer}>
-            <div className={style.footerLogo}>
-                <Link href='/'>
-                    <Image src="/logofooter.png" alt='logofooter' fill style={{ objectFit: "cover" }} />
-                </Link>
-            </div>
-            <div className={style.contactInfo}>
-                <div className={style.contact}>
-                    <a className='font-bold'>Thông tin liên hệ:</a>
-                    <a>Điện thoại: 0372992038</a>
-                    <a>Email: klkt842@gmail.com</a>
-                    <a className='font-medium text-lg'>Đội ngũ sẵn sàng hỗ trợ qua đường dây nóng 1001 9999</a>
-                </div>
-                <div className={style.link}>
-                    <a href="https://www.facebook.com/cnsnewscom?locale=vi_VN" target='_blank' rel='noopener noreferrer' className='flex items-center'>
-                        <svg width="40" height="40" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
-                            <path d="M12 2.53906C17.5229 2.53906 22 7.01621 22 12.5391C22 17.5304 18.3431 21.6674 13.5625 22.4176V15.4297H15.8926L16.3359 12.5391L13.5625 12.5387V10.6632C13.5625 10.657 13.5625 10.6509 13.5626 10.6447C13.5626 10.6354 13.5628 10.6262 13.5629 10.6169C13.578 9.84259 13.9742 9.10156 15.1921 9.10156H16.4531V6.64062C16.4531 6.64062 15.3087 6.44492 14.2146 6.44492C11.966 6.44492 10.4842 7.78652 10.4386 10.2193C10.4379 10.2578 10.4375 10.2965 10.4375 10.3355V12.5387H7.89844V15.4293L10.4375 15.4297V22.4172C5.65686 21.667 2 17.5304 2 12.5391C2 7.01621 6.47715 2.53906 12 2.53906Z" fill="#1877F2" />
-                        </svg>
-                        Facebook
-                    </a>
-                    <a href="https://www.instagram.com/cns_update/" target='_blank' rel='noopener noreferrer' className='flex items-center'>
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
-                            <path d="M8.6672 12C8.6672 10.1591 10.1591 8.6664 12 8.6664C13.8409 8.6664 15.3336 10.1591 15.3336 12C15.3336 13.8409 13.8409 15.3336 12 15.3336C10.1591 15.3336 8.6672 13.8409 8.6672 12ZM6.86512 12C6.86512 14.836 9.164 17.1349 12 17.1349C14.836 17.1349 17.1349 14.836 17.1349 12C17.1349 9.164 14.836 6.86512 12 6.86512C9.164 6.86512 6.86512 9.164 6.86512 12ZM16.1382 6.66152C16.1381 6.89886 16.2084 7.13089 16.3401 7.32829C16.4719 7.52568 16.6593 7.67956 16.8785 7.77047C17.0977 7.86138 17.339 7.88525 17.5718 7.83904C17.8046 7.79283 18.0185 7.67862 18.1863 7.51087C18.3542 7.34311 18.4686 7.12934 18.515 6.89658C18.5614 6.66382 18.5377 6.42253 18.447 6.20322C18.3563 5.98392 18.2025 5.79644 18.0052 5.6645C17.808 5.53257 17.576 5.4621 17.3386 5.462H17.3382C17.02 5.46215 16.715 5.58856 16.49 5.81347C16.265 6.03837 16.1384 6.34339 16.1382 6.66152ZM7.96 20.1398C6.98504 20.0954 6.45512 19.933 6.10296 19.7958C5.63608 19.614 5.30296 19.3975 4.95272 19.0478C4.60248 18.698 4.38568 18.3652 4.20472 17.8983C4.06744 17.5463 3.90504 17.0162 3.86072 16.0413C3.81224 14.9872 3.80256 14.6706 3.80256 12.0001C3.80256 9.3296 3.81304 9.01384 3.86072 7.95888C3.90512 6.98392 4.06872 6.45488 4.20472 6.10184C4.38648 5.63496 4.60296 5.30184 4.95272 4.9516C5.30248 4.60136 5.63528 4.38456 6.10296 4.2036C6.45496 4.06632 6.98504 3.90392 7.96 3.8596C9.01408 3.81112 9.33072 3.80144 12 3.80144C14.6693 3.80144 14.9862 3.81192 16.0412 3.8596C17.0162 3.904 17.5452 4.0676 17.8982 4.2036C18.3651 4.38456 18.6982 4.60184 19.0485 4.9516C19.3987 5.30136 19.6147 5.63496 19.7965 6.10184C19.9338 6.45384 20.0962 6.98392 20.1405 7.95888C20.189 9.01384 20.1986 9.3296 20.1986 12.0001C20.1986 14.6706 20.189 14.9863 20.1405 16.0413C20.0961 17.0162 19.9329 17.5462 19.7965 17.8983C19.6147 18.3652 19.3982 18.6983 19.0485 19.0478C18.6987 19.3972 18.3651 19.614 17.8982 19.7958C17.5462 19.933 17.0162 20.0954 16.0412 20.1398C14.9871 20.1882 14.6705 20.1979 12 20.1979C9.32952 20.1979 9.01376 20.1882 7.96 20.1398ZM7.8772 2.06056C6.81264 2.10904 6.0852 2.27784 5.44992 2.52504C4.792 2.78032 4.23504 3.1228 3.67848 3.67848C3.12192 4.23416 2.78032 4.792 2.52504 5.44992C2.27784 6.0856 2.10904 6.81264 2.06056 7.8772C2.01128 8.94344 2 9.28432 2 12C2 14.7157 2.01128 15.0566 2.06056 16.1228C2.10904 17.1874 2.27784 17.9144 2.52504 18.5501C2.78032 19.2076 3.122 19.7661 3.67848 20.3215C4.23496 20.877 4.792 21.219 5.44992 21.475C6.0864 21.7222 6.81264 21.891 7.8772 21.9394C8.944 21.9879 9.28432 22 12 22C14.7157 22 15.0566 21.9887 16.1228 21.9394C17.1874 21.891 17.9144 21.7222 18.5501 21.475C19.2076 21.219 19.765 20.8772 20.3215 20.3215C20.8781 19.7658 21.219 19.2076 21.475 18.5501C21.7222 17.9144 21.8918 17.1874 21.9394 16.1228C21.9879 15.0558 21.9992 14.7157 21.9992 12C21.9992 9.28432 21.9879 8.94344 21.9394 7.8772C21.891 6.81256 21.7222 6.0852 21.475 5.44992C21.219 4.7924 20.8772 4.23504 20.3215 3.67848C19.7658 3.12192 19.2076 2.78032 18.5509 2.52504C17.9144 2.27784 17.1874 2.10824 16.1236 2.06056C15.0574 2.01208 14.7165 2 12.0008 2C9.28512 2 8.944 2.01128 7.8772 2.06056Z" fill="#E1306C" />
-                        </svg>
-                        Instagram
-                    </a>
-                </div>
-            </div>
-        </footer>
-    )
-}
+  return (
+    <footer className="w-full bg-slate-100/90 text-slate-600 border-t border-slate-200/80 py-10 px-6 sm:px-12 transition-colors">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+        {/* Cột 1: Logo và Slogan thương hiệu */}
+        <div className="flex flex-col items-center md:items-start gap-2.5 max-w-sm text-center md:text-left shrink-0">
+          <Link href="/" className="inline-block">
+            <Image
+              src="/logofooter.png"
+              alt="logofooter"
+              width={150}
+              height={46}
+              className="object-contain"
+            />
+          </Link>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Nền tảng kết nối gia sư và học viên uy tín, chất lượng hàng đầu. Học tập hiệu quả và phát triển tương lai.
+          </p>
+          <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-medium pt-0.5">
+            <ShieldCheck className="size-4 shrink-0 text-emerald-600" />
+            <span>Gia sư được kiểm duyệt và xác thực</span>
+          </div>
+        </div>
 
-export default Footer
+        {/* Cột 2: Thông tin liên hệ */}
+        <div className="flex flex-col items-center md:items-start gap-2 text-xs">
+          <span className="font-bold text-sm text-slate-800 tracking-wide uppercase mb-1">
+            Thông tin liên hệ
+          </span>
+          <div className="flex items-center gap-2 text-slate-700">
+            <PhoneCall className="size-3.5 text-emerald-600 shrink-0" />
+            <span>
+              Hotline hỗ trợ:{" "}
+              <strong className="text-slate-900 text-sm font-bold">
+                1001 9999
+              </strong>
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Phone className="size-3.5 text-slate-400 shrink-0" />
+            <span>Điện thoại: 0372 992 038</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Mail className="size-3.5 text-slate-400 shrink-0" />
+            <span>Email: klkt842@gmail.com</span>
+          </div>
+        </div>
 
+        {/* Cột 3: Mạng xã hội / Liên kết */}
+        <div className="flex flex-col items-center md:items-start gap-2.5 text-xs">
+          <span className="font-bold text-sm text-slate-800 tracking-wide uppercase mb-1">
+            Kết nối với chúng tôi
+          </span>
+          <div className="flex items-center gap-2.5">
+            <a
+              href="https://www.facebook.com/cnsnewscom?locale=vi_VN"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs transition-all text-xs font-medium"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-blue-600 shrink-0"
+              >
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              <span>Facebook</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/cns_update/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/90 shadow-2xs transition-all text-xs font-medium"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-pink-600 shrink-0"
+              >
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+              <span>Instagram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Dòng bản quyền dưới cùng */}
+      <div className="max-w-7xl mx-auto mt-8 pt-5 border-t border-slate-200/80 text-center text-xs text-slate-400">
+        © 2026 CnS Platform. Tất cả quyền được bảo lưu.
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

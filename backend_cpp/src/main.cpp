@@ -3,7 +3,7 @@
 #include "../include/services/AuthService.h"
 #include "../include/services/TutorService.h"
 #include "../include/services/PostService.h"
-#include "../include/services/BookingService.h"
+#include "../include/services/ApplicationService.h"
 #include "../include/storage/FileManager.h"
 #include "../include/server/HttpServer.h"
 
@@ -13,25 +13,29 @@ int main() {
     AuthService authService;
     TutorService tutorService;
     PostService postService;
-    BookingService bookingService;
+    ApplicationService applicationService;
     FileManager fileManager("data");
 
     // 1. Nạp dữ liệu từ thư mục data/
     auto users = fileManager.loadUsers();
     auto profiles = fileManager.loadTutorProfiles();
     auto posts = fileManager.loadTutorPosts();
-    auto bookings = fileManager.loadBookings();
+    auto applications = fileManager.loadApplications();
+    auto reviews = fileManager.loadReviews();
 
-    if (!users.empty() || !posts.empty()) {
+    if (!users.empty() || !posts.empty() || !reviews.empty()) {
         authService.loadUsers(users);
         tutorService.loadProfiles(profiles);
+        tutorService.loadReviews(reviews);
+        for (const auto& u : users) {
+            postService.setTutorName(u.getId(), u.getFullName());
+            postService.updateTutorRating(u.getId(), tutorService.getAverageRating(u.getId()));
+        }
         postService.loadPosts(posts);
-        bookingService.loadBookings(bookings);
-        cout << "[FileManager] Da nap " << users.size() << " users va "
-             << posts.size() << " bai dang tu thu muc data/!\n";
+        applicationService.loadApplications(applications);
     }
 
-    // 2. Lấy PORT từ biến môi trường (Render tự cấp biến PORT, mặc định 10000 hoặc 5000)
+    // 2. Lấy PORT từ biến môi trường (Render tự cấp biến PORT, mặc định 5000)
     int port = 5000;
     const char* envPort = getenv("PORT");
     if (envPort != nullptr) {
@@ -42,8 +46,8 @@ int main() {
         }
     }
 
-    cout << "[Server] Khoi dong server tai port " << port << "...\n";
-    HttpServer server(port, authService, tutorService, postService, bookingService, fileManager);
+    cout << "[Server] Khoi dong C++ REST API tai port " << port << "...\n";
+    HttpServer server(port, authService, tutorService, postService, applicationService, fileManager);
     server.start();
 
     return 0;

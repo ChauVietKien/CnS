@@ -58,6 +58,11 @@ Trie::~Trie() {
     delete root;
 }
 
+void Trie::clear() {
+    delete root;
+    root = new TrieNode();
+}
+
 void Trie::insert(const string& word, int refId) {
     string lowerWord = toLowerCase(word);
     TrieNode* curr = root;

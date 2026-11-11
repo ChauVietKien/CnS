@@ -1,0 +1,16 @@
+/* [project]/src/app/(main)/page.module.css [app-client] (css) */
+.page-module__2fMDQG__main {
+  flex: 1;
+  min-height: 0;
+}
+
+.page-module__2fMDQG__card {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px 20px 48px;
+  display: grid;
+}
+
+/*# sourceMappingURL=src_app_%28main%29_page_module_1f2py3u.css.map*/

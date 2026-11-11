@@ -1,5 +1,5 @@
 #include "../../include/dsa/MinHeap.h"
-#include "../../include/services/BookingService.h"
+#include "../../include/services/ApplicationService.h"
 #include <stdexcept>
 #include <utility>
 
@@ -82,5 +82,5 @@ int MinHeap<T>::size() const {
     return heap.size();
 }
 
-template class MinHeap<ScheduleEvent>;
+template class MinHeap<ApplicationSchedule>;
 template class MinHeap<int>;

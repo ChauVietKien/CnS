@@ -1,4 +1,9 @@
 .cardfooter {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
 }

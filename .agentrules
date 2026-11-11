@@ -1,0 +1,12 @@
+DO NOT run "npm run build". Only use "npx tsc --noEmit" to check errors.
+Never restart dev server if it is already running.
+Keep terminal output minimal; do not run tests unless asked.
+Only edit relevant lines, do not rewrite whole files.
+
+# UI & Design Rules
+
+- Stack: Tailwind CSS, shadcn/ui, Lucide icons, Framer Motion.
+- Clean DOM: No deep div nesting. Use semantic HTML and CSS Grid/Flexbox. Keep components under 150 lines.
+- Aesthetic: Linear/Vercel/Apple style. High contrast, subtle 1px borders (border-zinc-200 dark:border-zinc-800), generous whitespace, consistent spacing (p-4, p-6, gap-4).
+- Forbidden: No tacky neon gradients, no heavy drop-shadows, no inline styles, no arbitrary Tailwind values unless strictly needed.
+- Reuse first: Always check existing `/components/ui` before creating new elements.

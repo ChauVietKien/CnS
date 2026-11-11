@@ -1,1 +1,4 @@
-1|Chuyên gia phát triển Frontend với React, TypeScript và các kiến trúc hiện đại.|Đại học|ĐH Bách Khoa|Công nghệ thông tin|5
+1|Giảng viên giàu kinh nghiệm về Toán ứng dụng và Lập trình phần mềm, cựu sinh viên ĐH Bách Khoa.|Đại học|ĐH Bách Khoa Đà Nẵng|Công nghệ thông tin|4
+4|Thạc sĩ Giảng dạy Tiếng Anh (TESOL), chứng chỉ IELTS 8.5, hơn 5 năm luyện thi du học và THPTQG.|Thạc sĩ|ĐH Ngoại ngữ Đà Nẵng|Sư phạm Tiếng Anh|5
+5|Cựu học sinh chuyên Lý THPT Chuyên Lê Quý Đôn, giải Ba Olympic Vật lý Quốc gia, phương pháp tư duy bản chất.|Đại học|ĐH Sư phạm Đà Nẵng|Sư phạm Vật lý|3
+6|Tốt nghiệp thủ khoa khoa Ngữ Văn, chuyên gia luyện thi chuyển cấp vào 10 chuyên Văn và chinh phục kỳ thi THPTQG.|Đại học|ĐH Sư phạm TP.HCM|Sư phạm Ngữ Văn|4

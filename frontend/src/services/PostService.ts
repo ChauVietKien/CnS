@@ -1,7 +1,7 @@
 import axios from "axios";
 import { axiosClient } from "./axiosClient";
 
-export const createPost = async (data: FormData) => {
+export const createPost = async (data: any) => {
   const res = await axiosClient.post(
     `${process.env.NEXT_PUBLIC_API_URL}/tutor-post/create`,
     data,
@@ -22,6 +22,20 @@ export const getPost = async (id: string) => {
 export const getAllPosts = async () => {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/tutor-post/get-all-posts`,
+  );
+  return res.data;
+};
+
+export const getTopRecommended = async (limit: number = 4) => {
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/tutor-post/top-recommended?limit=${limit}`,
+  );
+  return res.data;
+};
+
+export const getRecentlyViewed = async (limit: number = 4) => {
+  const res = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/tutor-post/recently-viewed?limit=${limit}`,
   );
   return res.data;
 };
