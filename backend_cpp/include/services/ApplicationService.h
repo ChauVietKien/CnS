@@ -5,24 +5,11 @@
 #include <string>
 #include <optional>
 #include "../models/Application.h"
-#include "../dsa/Queue.h"
-#include "../dsa/MinHeap.h"
 #include "../dsa/HashTable.h"
-
-struct ApplicationSchedule {
-    int applicationId;
-    std::string timestamp;
-
-    bool operator<(const ApplicationSchedule& other) const {
-        return timestamp < other.timestamp;
-    }
-};
 
 class ApplicationService {
 private:
     HashTable<int, Application> applicationsById;
-    Queue<int> applicationQueue;
-    MinHeap<ApplicationSchedule> scheduleHeap;
     int nextApplicationId;
 
 public:

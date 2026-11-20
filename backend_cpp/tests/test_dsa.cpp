@@ -4,10 +4,7 @@
 #include "../include/dsa/BST.h"
 #include "../include/dsa/HashTable.h"
 #include "../include/dsa/MaxHeap.h"
-#include "../include/dsa/MinHeap.h"
-#include "../include/dsa/Queue.h"
 #include "../include/dsa/Deque.h"
-#include "../include/dsa/Stack.h"
 #include "../include/dsa/DoublyLinkedList.h"
 #include "../include/dsa/Set.h"
 #include "../include/models/Review.h"
@@ -37,18 +34,6 @@ int main() {
     assert(ht.find("kien", val) && val == 10);
     cout << "Test HashTable: PASS" << endl;
 
-    Queue<int> q;
-    q.push(1);
-    q.push(2);
-    assert(q.pop() == 1 && q.front() == 2);
-    cout << "Test Queue: PASS" << endl;
-
-    Stack<int> s;
-    s.push(10);
-    s.push(20);
-    assert(s.pop() == 20 && s.top() == 10);
-    cout << "Test Stack: PASS" << endl;
-
     Deque<int> dq;
     dq.pushFront(1);
     dq.pushBack(2);
@@ -60,13 +45,6 @@ int main() {
     assert(!set.insert("Toan"));
     assert(set.contains("Toan"));
     cout << "Test Set: PASS" << endl;
-
-    MinHeap<int> minH;
-    minH.push(50);
-    minH.push(10);
-    minH.push(30);
-    assert(minH.pop() == 10);
-    cout << "Test MinHeap: PASS" << endl;
 
     MaxHeap<int> maxH;
     maxH.push(10);
@@ -81,6 +59,6 @@ int main() {
     assert(dll.size() == 2);
     cout << "Test DoublyLinkedList: PASS" << endl;
 
-    cout << "\nALL 10 DSA TESTS PASSED SUCCESSFULLY!" << endl;
+    cout << "\nALL 7 CORE DSA TESTS PASSED SUCCESSFULLY!" << endl;
     return 0;
 }

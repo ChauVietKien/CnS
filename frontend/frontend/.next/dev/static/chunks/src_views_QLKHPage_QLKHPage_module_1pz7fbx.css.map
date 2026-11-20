@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["file:///D:/AWS/CnS/frontend/src/views/QLKHPage/QLKHPage.module.css"],"sourcesContent":[".main {\r\n    width: 100%;\r\n    height: 100vh;\r\n    background-color: rgb(238, 210, 219);\r\n}\r\n\r\n.dk {\r\n    display: flex;\r\n    min-width: 100px;\r\n    min-height: 19vh;\r\n    background-color: aquamarine;\r\n    justify-content: flex-start;\r\n    padding-left: 2rem;\r\n    align-items: center;\r\n    margin: auto;\r\n    gap: 1rem;\r\n}\r\n\r\n.kh {\r\n    background-color: rgb(186, 244, 225);\r\n    width: 100%;\r\n    height: 100%;\r\n    display: flex;\r\n    flex-direction: column;\r\n    justify-content: flex-start;\r\n    padding-top: 1rem;\r\n    padding-left: 2rem;\r\n    margin: auto;\r\n    gap: 1rem;\r\n}\r\n\r\n.table {\r\n    display: flex;\r\n    height: auto;\r\n    padding: 0 2rem 0 2rem;\r\n}"],"names":[],"mappings":"AAAA;;;;;;AAMA;;;;;;;;;;;;AAYA;;;;;;;;;;;;;AAaA"}}]
-}

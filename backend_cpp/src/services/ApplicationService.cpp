@@ -17,8 +17,6 @@ int ApplicationService::createApplication(int studentId, int tutorId, int postId
                     tutorName, method, price, address, schedule, note, time, "approved");
 
     applicationsById.insert(id, app);
-    applicationQueue.push(id);
-    scheduleHeap.push({id, time});
 
     return id;
 }
@@ -75,8 +73,6 @@ bool ApplicationService::deleteApplication(int id) {
 void ApplicationService::loadApplications(const vector<Application>& list) {
     for (const auto& a : list) {
         applicationsById.insert(a.getId(), a);
-        applicationQueue.push(a.getId());
-        scheduleHeap.push({a.getId(), a.getCreatedAt()});
         if (a.getId() >= nextApplicationId) {
             nextApplicationId = a.getId() + 1;
         }

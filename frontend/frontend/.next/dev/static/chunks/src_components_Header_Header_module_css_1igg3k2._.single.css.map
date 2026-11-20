@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/components/Header/Header.module.css"],"sourcesContent":[".headerContainer {\r\n    display: grid;\r\n    grid-template-columns: 180px 1fr 300px;\r\n    height: 60px;\r\n    min-height: 30px;\r\n    max-height: 70px;\r\n    background-color: rgb(184, 179, 234);\r\n    border-bottom: 1px solid #c6c8cc;\r\n}\r\n\r\n.logo {\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    padding: 5px;\r\n}\r\n\r\n.navMenu {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-self: center;\r\n    width: 100%;\r\n    padding: 10px;\r\n}\r\n\r\n.navList {\r\n    display: flex;\r\n    gap: 20px;\r\n}\r\n\r\n.userAction {\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    gap: 30px;\r\n}\r\n\r\n.actionItem {\r\n    display: flex;\r\n    flex-direction: row;\r\n    align-items: center;\r\n    justify-content: center;\r\n    gap: 5px;\r\n    cursor: pointer;\r\n}"],"names":[],"mappings":"AAAA;;;;;;;;;;AAUA;;;;;;;AAOA;;;;;;;;AAQA;;;;;AAKA;;;;;;;AAOA"}}]
-}
