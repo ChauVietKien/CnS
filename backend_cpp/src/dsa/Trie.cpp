@@ -1,58 +1,34 @@
 #include "../../include/dsa/Trie.h"
 #include <algorithm>
 
-using namespace std;
-
-Trie::TrieNode::TrieNode() : isEndOfWord(false) {}
-
-Trie::TrieNode::~TrieNode() {
-    for (auto& pair : children) {
-        delete pair.second;
-    }
+Trie::Node::~Node() {
+    for (auto& pair : children) delete pair.second;
 }
 
-string Trie::toLowerCase(const string& str) const {
-    string res = str;
-    transform(res.begin(), res.end(), res.begin(), [](unsigned char c) {
-        return tolower(c);
+std::string Trie::toLowerCase(const std::string& str) const {
+    std::string res = str;
+    std::transform(res.begin(), res.end(), res.begin(), [](unsigned char c) {
+        return std::tolower(c);
     });
     return res;
 }
 
-void Trie::collectWords(TrieNode* node, const string& prefix, vector<string>& results, int limit) const {
-    if (node == nullptr || (int)results.size() >= limit) {
-        return;
-    }
-
-    if (node->isEndOfWord) {
-        results.push_back(prefix);
-    }
-
+void Trie::collectWords(Node* node, const std::string& prefix, std::vector<std::string>& results, int limit) const {
+    if (!node || (int)results.size() >= limit) return;
+    if (node->isEndOfWord) results.push_back(prefix);
     for (const auto& pair : node->children) {
         collectWords(pair.second, prefix + pair.first, results, limit);
-        if ((int)results.size() >= limit) {
-            return;
-        }
+        if ((int)results.size() >= limit) return;
     }
 }
 
-void Trie::collectIds(TrieNode* node, vector<int>& ids) const {
-    if (node == nullptr) {
-        return;
-    }
-
-    for (int id : node->referenceIds) {
-        ids.push_back(id);
-    }
-
-    for (const auto& pair : node->children) {
-        collectIds(pair.second, ids);
-    }
+void Trie::collectIds(Node* node, std::vector<int>& ids) const {
+    if (!node) return;
+    for (int id : node->referenceIds) ids.push_back(id);
+    for (const auto& pair : node->children) collectIds(pair.second, ids);
 }
 
-Trie::Trie() {
-    root = new TrieNode();
-}
+Trie::Trie() : root(new Node()) {}
 
 Trie::~Trie() {
     delete root;
@@ -60,54 +36,40 @@ Trie::~Trie() {
 
 void Trie::clear() {
     delete root;
-    root = new TrieNode();
+    root = new Node();
 }
 
-void Trie::insert(const string& word, int refId) {
-    string lowerWord = toLowerCase(word);
-    TrieNode* curr = root;
-
-    for (char ch : lowerWord) {
-        if (curr->children.find(ch) == curr->children.end()) {
-            curr->children[ch] = new TrieNode();
-        }
+void Trie::insert(const std::string& word, int refId) {
+    std::string lower = toLowerCase(word);
+    Node* curr = root;
+    for (char ch : lower) {
+        if (!curr->children.count(ch)) curr->children[ch] = new Node();
         curr = curr->children[ch];
     }
-
     curr->isEndOfWord = true;
-    if (refId != -1) {
-        curr->referenceIds.push_back(refId);
-    }
+    if (refId != -1) curr->referenceIds.push_back(refId);
 }
 
-vector<string> Trie::searchPrefix(const string& prefix, int limit) const {
-    string lowerPrefix = toLowerCase(prefix);
-    TrieNode* curr = root;
-    vector<string> results;
-
-    for (char ch : lowerPrefix) {
-        if (curr->children.find(ch) == curr->children.end()) {
-            return results;
-        }
+std::vector<std::string> Trie::searchPrefix(const std::string& prefix, int limit) const {
+    std::string lower = toLowerCase(prefix);
+    Node* curr = root;
+    std::vector<std::string> results;
+    for (char ch : lower) {
+        if (!curr->children.count(ch)) return results;
         curr = curr->children[ch];
     }
-
-    collectWords(curr, lowerPrefix, results, limit);
+    collectWords(curr, lower, results, limit);
     return results;
 }
 
-vector<int> Trie::searchIdsByPrefix(const string& prefix) const {
-    string lowerPrefix = toLowerCase(prefix);
-    TrieNode* curr = root;
-    vector<int> results;
-
-    for (char ch : lowerPrefix) {
-        if (curr->children.find(ch) == curr->children.end()) {
-            return results;
-        }
+std::vector<int> Trie::searchIdsByPrefix(const std::string& prefix) const {
+    std::string lower = toLowerCase(prefix);
+    Node* curr = root;
+    std::vector<int> results;
+    for (char ch : lower) {
+        if (!curr->children.count(ch)) return results;
         curr = curr->children[ch];
     }
-
     collectIds(curr, results);
     return results;
 }

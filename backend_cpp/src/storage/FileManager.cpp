@@ -321,7 +321,7 @@ vector<Application> FileManager::loadApplications() {
                 string status = (parts.size() > 10) ? parts[10] : "approved";
 
                 Application a(id, studentId, tutorId, postId, name, email, phone, "Toán học",
-                              className, "Châu Việt Kiên", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, createdAt, status);
+                              className, "Châu Khải Phong", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, createdAt, status);
                 list.push_back(a);
             } catch (...) {}
         } else if (parts.size() >= 6) {
@@ -334,7 +334,7 @@ vector<Application> FileManager::loadApplications() {
                 string time = parts[4];
                 string note = (parts.size() > 6) ? parts[6] : "Dang ky hoc";
                 Application a(id, studentId, tutorId, postId, "Đức Minh", "minh@gmail.com", "0907654321", "Toán học",
-                              "12", "Châu Việt Kiên", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, time, "approved");
+                              "12", "Châu Khải Phong", "Online", "200000 đ/buổi", "Đà Nẵng", "Thứ 2 & 4", note, time, "approved");
                 list.push_back(a);
             } catch (...) {}
         }

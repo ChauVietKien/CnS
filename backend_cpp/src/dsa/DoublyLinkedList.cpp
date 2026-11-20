@@ -3,20 +3,13 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
-
-template <typename T>
-DoublyLinkedList<T>::Node::Node(const T& val) : data(val), prev(nullptr), next(nullptr) {}
-
 template <typename T>
 DoublyLinkedList<T>::DoublyLinkedList() : head(nullptr), tail(nullptr), count(0) {}
 
 template <typename T>
 void DoublyLinkedList<T>::copyFrom(const DoublyLinkedList& other) {
-    Node* curr = other.head;
-    while (curr != nullptr) {
+    for (Node* curr = other.head; curr; curr = curr->next) {
         pushBack(curr->data);
-        curr = curr->next;
     }
 }
 
@@ -41,58 +34,48 @@ DoublyLinkedList<T>::~DoublyLinkedList() {
 
 template <typename T>
 void DoublyLinkedList<T>::pushFront(const T& val) {
-    Node* newNode = new Node(val);
-    if (head == nullptr) {
-        head = tail = newNode;
+    Node* node = new Node(val);
+    if (!head) {
+        head = tail = node;
     } else {
-        newNode->next = head;
-        head->prev = newNode;
-        head = newNode;
+        node->next = head;
+        head->prev = node;
+        head = node;
     }
     count++;
 }
 
 template <typename T>
 void DoublyLinkedList<T>::pushBack(const T& val) {
-    Node* newNode = new Node(val);
-    if (tail == nullptr) {
-        head = tail = newNode;
+    Node* node = new Node(val);
+    if (!tail) {
+        head = tail = node;
     } else {
-        newNode->prev = tail;
-        tail->next = newNode;
-        tail = newNode;
+        node->prev = tail;
+        tail->next = node;
+        tail = node;
     }
     count++;
 }
 
 template <typename T>
 void DoublyLinkedList<T>::popFront() {
-    if (empty()) {
-        throw runtime_error("List is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     Node* temp = head;
     head = head->next;
-    if (head != nullptr) {
-        head->prev = nullptr;
-    } else {
-        tail = nullptr;
-    }
+    if (head) head->prev = nullptr;
+    else tail = nullptr;
     delete temp;
     count--;
 }
 
 template <typename T>
 void DoublyLinkedList<T>::popBack() {
-    if (empty()) {
-        throw runtime_error("List is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     Node* temp = tail;
     tail = tail->prev;
-    if (tail != nullptr) {
-        tail->next = nullptr;
-    } else {
-        head = nullptr;
-    }
+    if (tail) tail->next = nullptr;
+    else head = nullptr;
     delete temp;
     count--;
 }
@@ -109,22 +92,18 @@ int DoublyLinkedList<T>::size() const {
 
 template <typename T>
 void DoublyLinkedList<T>::clear() {
-    while (!empty()) {
-        popFront();
-    }
+    while (!empty()) popFront();
 }
 
 template <typename T>
-vector<T> DoublyLinkedList<T>::toVector() const {
-    vector<T> list;
-    Node* curr = head;
-    while (curr != nullptr) {
-        list.push_back(curr->data);
-        curr = curr->next;
+std::vector<T> DoublyLinkedList<T>::toVector() const {
+    std::vector<T> res;
+    for (Node* curr = head; curr; curr = curr->next) {
+        res.push_back(curr->data);
     }
-    return list;
+    return res;
 }
 
 template class DoublyLinkedList<Review>;
 template class DoublyLinkedList<int>;
-template class DoublyLinkedList<string>;
+template class DoublyLinkedList<std::string>;

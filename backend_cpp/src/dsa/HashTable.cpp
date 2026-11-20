@@ -7,11 +7,6 @@
 #include <string>
 #include <functional>
 
-using namespace std;
-
-template <typename K, typename V>
-HashTable<K, V>::HashNode::HashNode(const K& k, const V& v) : key(k), value(v), next(nullptr) {}
-
 template <typename K, typename V>
 HashTable<K, V>::HashTable(int initCapacity) : capacity(initCapacity), size(0) {
     table.assign(capacity, nullptr);
@@ -23,10 +18,8 @@ void HashTable<K, V>::copyFrom(const HashTable& other) {
     table.assign(capacity, nullptr);
     size = 0;
     for (int i = 0; i < other.capacity; ++i) {
-        HashNode* curr = other.table[i];
-        while (curr != nullptr) {
+        for (HashNode* curr = other.table[i]; curr; curr = curr->next) {
             insert(curr->key, curr->value);
-            curr = curr->next;
         }
     }
 }
@@ -52,21 +45,20 @@ HashTable<K, V>::~HashTable() {
 
 template <typename K, typename V>
 int HashTable<K, V>::hashFunction(const K& key) const {
-    return hash<K>{}(key) % capacity;
+    return std::hash<K>{}(key) % capacity;
 }
 
 template <typename K, typename V>
 void HashTable<K, V>::rehash() {
     int oldCapacity = capacity;
-    vector<HashNode*> oldTable = table;
-
+    std::vector<HashNode*> oldTable = table;
     capacity *= 2;
     table.assign(capacity, nullptr);
     size = 0;
 
     for (int i = 0; i < oldCapacity; ++i) {
         HashNode* curr = oldTable[i];
-        while (curr != nullptr) {
+        while (curr) {
             insert(curr->key, curr->value);
             HashNode* temp = curr;
             curr = curr->next;
@@ -77,61 +69,53 @@ void HashTable<K, V>::rehash() {
 
 template <typename K, typename V>
 void HashTable<K, V>::insert(const K& key, const V& value) {
-    if ((float)size / capacity > 0.75f) {
-        rehash();
-    }
+    if ((float)size / capacity > 0.75f) rehash();
 
-    int index = hashFunction(key);
-    HashNode* curr = table[index];
-
-    while (curr != nullptr) {
+    int idx = hashFunction(key);
+    for (HashNode* curr = table[idx]; curr; curr = curr->next) {
         if (curr->key == key) {
             curr->value = value;
             return;
         }
-        curr = curr->next;
     }
 
-    HashNode* newNode = new HashNode(key, value);
-    newNode->next = table[index];
-    table[index] = newNode;
+    HashNode* node = new HashNode(key, value);
+    node->next = table[idx];
+    table[idx] = node;
     size++;
 }
 
 template <typename K, typename V>
 bool HashTable<K, V>::find(const K& key, V& outValue) const {
-    int index = hashFunction(key);
-    HashNode* curr = table[index];
-
-    while (curr != nullptr) {
+    int idx = hashFunction(key);
+    for (HashNode* curr = table[idx]; curr; curr = curr->next) {
         if (curr->key == key) {
             outValue = curr->value;
             return true;
         }
-        curr = curr->next;
     }
     return false;
 }
 
 template <typename K, typename V>
 bool HashTable<K, V>::contains(const K& key) const {
-    V dummy;
-    return find(key, dummy);
+    int idx = hashFunction(key);
+    for (HashNode* curr = table[idx]; curr; curr = curr->next) {
+        if (curr->key == key) return true;
+    }
+    return false;
 }
 
 template <typename K, typename V>
 bool HashTable<K, V>::remove(const K& key) {
-    int index = hashFunction(key);
-    HashNode* curr = table[index];
+    int idx = hashFunction(key);
+    HashNode* curr = table[idx];
     HashNode* prev = nullptr;
 
-    while (curr != nullptr) {
+    while (curr) {
         if (curr->key == key) {
-            if (prev == nullptr) {
-                table[index] = curr->next;
-            } else {
-                prev->next = curr->next;
-            }
+            if (!prev) table[idx] = curr->next;
+            else prev->next = curr->next;
             delete curr;
             size--;
             return true;
@@ -146,7 +130,7 @@ template <typename K, typename V>
 void HashTable<K, V>::clear() {
     for (int i = 0; i < capacity; ++i) {
         HashNode* curr = table[i];
-        while (curr != nullptr) {
+        while (curr) {
             HashNode* temp = curr;
             curr = curr->next;
             delete temp;
@@ -167,26 +151,24 @@ bool HashTable<K, V>::isEmpty() const {
 }
 
 template <typename K, typename V>
-vector<V> HashTable<K, V>::getAllValues() const {
-    vector<V> values;
+std::vector<V> HashTable<K, V>::getAllValues() const {
+    std::vector<V> res;
     for (int i = 0; i < capacity; ++i) {
-        HashNode* curr = table[i];
-        while (curr != nullptr) {
-            values.push_back(curr->value);
-            curr = curr->next;
+        for (HashNode* curr = table[i]; curr; curr = curr->next) {
+            res.push_back(curr->value);
         }
     }
-    return values;
+    return res;
 }
 
-template class HashTable<string, User>;
-template class HashTable<string, bool>;
+template class HashTable<std::string, User>;
+template class HashTable<std::string, bool>;
 template class HashTable<int, TutorProfile>;
 template class HashTable<int, TutorPost>;
-template class HashTable<int, Set<string>>;
+template class HashTable<int, Set<std::string>>;
 template class HashTable<int, Application>;
 template class HashTable<int, int>;
-template class HashTable<string, string>;
-template class HashTable<string, int>;
-template class HashTable<int, string>;
+template class HashTable<std::string, std::string>;
+template class HashTable<std::string, int>;
+template class HashTable<int, std::string>;
 template class HashTable<int, double>;

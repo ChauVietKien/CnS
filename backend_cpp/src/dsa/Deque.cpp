@@ -2,20 +2,13 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
-
-template <typename T>
-Deque<T>::Node::Node(const T& val) : data(val), prev(nullptr), next(nullptr) {}
-
 template <typename T>
 Deque<T>::Deque() : head(nullptr), tail(nullptr), count(0) {}
 
 template <typename T>
 void Deque<T>::copyFrom(const Deque& other) {
-    Node* curr = other.head;
-    while (curr != nullptr) {
+    for (Node* curr = other.head; curr; curr = curr->next) {
         pushBack(curr->data);
-        curr = curr->next;
     }
 }
 
@@ -40,43 +33,38 @@ Deque<T>::~Deque() {
 
 template <typename T>
 void Deque<T>::pushFront(const T& val) {
-    Node* newNode = new Node(val);
-    if (head == nullptr) {
-        head = tail = newNode;
+    Node* node = new Node(val);
+    if (!head) {
+        head = tail = node;
     } else {
-        newNode->next = head;
-        head->prev = newNode;
-        head = newNode;
+        node->next = head;
+        head->prev = node;
+        head = node;
     }
     count++;
 }
 
 template <typename T>
 void Deque<T>::pushBack(const T& val) {
-    Node* newNode = new Node(val);
-    if (tail == nullptr) {
-        head = tail = newNode;
+    Node* node = new Node(val);
+    if (!tail) {
+        head = tail = node;
     } else {
-        newNode->prev = tail;
-        tail->next = newNode;
-        tail = newNode;
+        node->prev = tail;
+        tail->next = node;
+        tail = node;
     }
     count++;
 }
 
 template <typename T>
 T Deque<T>::popFront() {
-    if (empty()) {
-        throw runtime_error("Deque is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     Node* temp = head;
     T val = temp->data;
     head = head->next;
-    if (head != nullptr) {
-        head->prev = nullptr;
-    } else {
-        tail = nullptr;
-    }
+    if (head) head->prev = nullptr;
+    else tail = nullptr;
     delete temp;
     count--;
     return val;
@@ -84,17 +72,12 @@ T Deque<T>::popFront() {
 
 template <typename T>
 T Deque<T>::popBack() {
-    if (empty()) {
-        throw runtime_error("Deque is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     Node* temp = tail;
     T val = temp->data;
     tail = tail->prev;
-    if (tail != nullptr) {
-        tail->next = nullptr;
-    } else {
-        head = nullptr;
-    }
+    if (tail) tail->next = nullptr;
+    else head = nullptr;
     delete temp;
     count--;
     return val;
@@ -102,17 +85,13 @@ T Deque<T>::popBack() {
 
 template <typename T>
 T Deque<T>::front() const {
-    if (empty()) {
-        throw runtime_error("Deque is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     return head->data;
 }
 
 template <typename T>
 T Deque<T>::back() const {
-    if (empty()) {
-        throw runtime_error("Deque is empty");
-    }
+    if (empty()) throw std::runtime_error("Empty");
     return tail->data;
 }
 
@@ -128,10 +107,8 @@ int Deque<T>::size() const {
 
 template <typename T>
 void Deque<T>::clear() {
-    while (!empty()) {
-        popFront();
-    }
+    while (!empty()) popFront();
 }
 
 template class Deque<int>;
-template class Deque<string>;
+template class Deque<std::string>;

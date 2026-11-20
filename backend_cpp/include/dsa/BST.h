@@ -6,21 +6,20 @@
 template <typename K, typename V>
 class BST {
 private:
-    struct BSTNode {
+    struct Node {
         K key;
         std::vector<V> values;
-        BSTNode* left;
-        BSTNode* right;
-
-        BSTNode(const K& k, const V& v);
+        Node* left;
+        Node* right;
+        Node(const K& k, const V& v) : key(k), values{v}, left(nullptr), right(nullptr) {}
     };
 
-    BSTNode* root;
+    Node* root;
 
-    BSTNode* copyTree(BSTNode* node);
-    BSTNode* insertNode(BSTNode* node, const K& key, const V& value);
-    void findRangeHelper(BSTNode* node, const K& minKey, const K& maxKey, std::vector<V>& results) const;
-    void destroyTree(BSTNode* node);
+    Node* copyTree(Node* node);
+    Node* insertNode(Node* node, const K& key, const V& value);
+    void findRangeHelper(Node* node, const K& minKey, const K& maxKey, std::vector<V>& res) const;
+    void destroyTree(Node* node);
 
 public:
     BST();

@@ -7,20 +7,19 @@
 
 class Trie {
 private:
-    struct TrieNode {
-        std::unordered_map<char, TrieNode*> children;
+    struct Node {
+        std::unordered_map<char, Node*> children;
         bool isEndOfWord;
         std::vector<int> referenceIds;
-
-        TrieNode();
-        ~TrieNode();
+        Node() : isEndOfWord(false) {}
+        ~Node();
     };
 
-    TrieNode* root;
+    Node* root;
 
     std::string toLowerCase(const std::string& str) const;
-    void collectWords(TrieNode* node, const std::string& prefix, std::vector<std::string>& results, int limit) const;
-    void collectIds(TrieNode* node, std::vector<int>& ids) const;
+    void collectWords(Node* node, const std::string& prefix, std::vector<std::string>& results, int limit) const;
+    void collectIds(Node* node, std::vector<int>& ids) const;
 
 public:
     Trie();

@@ -237,7 +237,7 @@ static string formatCourseApplicationJson(const Application& a, const PostServic
     string address = "Đà Nẵng";
     string proof = "https://bizweb.dktcdn.net/100/255/283/themes/588445/assets/cate_2_2.jpg?1786698433736";
     int tutorId = a.getTutorId();
-    string tutorName = "Châu Việt Kiên";
+    string tutorName = "Châu Khải Phong";
 
     if (postOpt.has_value()) {
         subject = postOpt->getSubjectName();
@@ -790,7 +790,7 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
 
     // Refresh token
     if (req.method == "POST" && req.path == "/api/user/refresh-token") {
-        string token = generateMockJwt(1, "kien@gmail.com", "tutor");
+        string token = generateMockJwt(1, "phong@gmail.com", "tutor");
         return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"access_token\":\"" + token + "\"}");
     }
 
@@ -859,7 +859,7 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
     }
 
     if (req.path.rfind("/api/tutor-profile/get-profile/", 0) == 0) {
-        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"data\":{\"name\":\"Châu Việt Kiên\",\"phone\":\"0901234567\",\"bio\":\"Giảng viên Bách Khoa\"}}");
+        return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"data\":{\"name\":\"Châu Khải Phong\",\"phone\":\"0901234567\",\"bio\":\"Giảng viên Bách Khoa\"}}");
     }
     if (req.path == "/api/tutor-profile/create" || req.path.rfind("/api/tutor-profile/update-profile/", 0) == 0) {
         return HttpResponse(200, "application/json", "{\"status\":\"OK\",\"message\":\"Success\",\"data\":{}}");
@@ -901,7 +901,7 @@ HttpResponse HttpServer::routeRequest(const HttpRequest& req) {
         string address = (postOpt.has_value() && !postOpt->getAddress().empty()) ? postOpt->getAddress() : "Đà Nẵng";
         string schedule = (postOpt.has_value() && !postOpt->getSchedule().empty()) ? postOpt->getSchedule() : "Thứ 2 & Thứ 4 (18:00 - 20:00)";
 
-        string tutorName = "Châu Việt Kiên";
+        string tutorName = "Châu Khải Phong";
         for (const auto& u : allUsers) {
             if (u.getId() == tutorId) {
                 tutorName = u.getFullName();

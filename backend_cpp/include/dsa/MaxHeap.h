@@ -8,8 +8,8 @@ class MaxHeap {
 private:
     std::vector<T> heap;
 
-    void heapifyUp(int index);
-    void heapifyDown(int index);
+    void heapifyUp(int i);
+    void heapifyDown(int i);
 
 public:
     MaxHeap();

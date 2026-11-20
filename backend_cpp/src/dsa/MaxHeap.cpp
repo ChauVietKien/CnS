@@ -3,72 +3,52 @@
 #include <stdexcept>
 #include <utility>
 
-using namespace std;
-
 template <typename T>
 MaxHeap<T>::MaxHeap() {}
 
 template <typename T>
-void MaxHeap<T>::heapifyUp(int index) {
-    while (index > 0) {
-        int parent = (index - 1) / 2;
-        if (heap[index] > heap[parent]) {
-            swap(heap[index], heap[parent]);
-            index = parent;
-        } else {
-            break;
-        }
+void MaxHeap<T>::heapifyUp(int i) {
+    while (i > 0) {
+        int p = (i - 1) / 2;
+        if (heap[i] > heap[p]) {
+            std::swap(heap[i], heap[p]);
+            i = p;
+        } else break;
     }
 }
 
 template <typename T>
-void MaxHeap<T>::heapifyDown(int index) {
+void MaxHeap<T>::heapifyDown(int i) {
     int n = heap.size();
-    while (index < n) {
-        int left = 2 * index + 1;
-        int right = 2 * index + 2;
-        int largest = index;
-
-        if (left < n && heap[left] > heap[largest]) {
-            largest = left;
-        }
-        if (right < n && heap[right] > heap[largest]) {
-            largest = right;
-        }
-        if (largest != index) {
-            swap(heap[index], heap[largest]);
-            index = largest;
-        } else {
-            break;
-        }
+    while (true) {
+        int l = 2 * i + 1, r = 2 * i + 2, best = i;
+        if (l < n && heap[l] > heap[best]) best = l;
+        if (r < n && heap[r] > heap[best]) best = r;
+        if (best == i) break;
+        std::swap(heap[i], heap[best]);
+        i = best;
     }
 }
 
 template <typename T>
 void MaxHeap<T>::push(const T& val) {
     heap.push_back(val);
-    heapifyUp(heap.size() - 1);
+    heapifyUp((int)heap.size() - 1);
 }
 
 template <typename T>
 T MaxHeap<T>::pop() {
-    if (heap.empty()) {
-        throw runtime_error("Heap is empty");
-    }
-    T topVal = heap[0];
+    if (heap.empty()) throw std::runtime_error("Empty");
+    T res = heap[0];
     heap[0] = heap.back();
     heap.pop_back();
-    if (!heap.empty()) {
-        heapifyDown(0);
-    }
-    return topVal;
+    if (!heap.empty()) heapifyDown(0);
+    return res;
 }
 
 template <typename T>
 T MaxHeap<T>::top() const {
-    if (heap.empty()) {
-        throw runtime_error("Heap is empty");
-    }
+    if (heap.empty()) throw std::runtime_error("Empty");
     return heap[0];
 }
 
@@ -83,15 +63,13 @@ int MaxHeap<T>::size() const {
 }
 
 template <typename T>
-vector<T> MaxHeap<T>::getTopN(int n) {
+std::vector<T> MaxHeap<T>::getTopN(int n) {
     MaxHeap<T> temp = *this;
-    vector<T> result;
-    int count = 0;
-    while (!temp.empty() && count < n) {
-        result.push_back(temp.pop());
-        count++;
+    std::vector<T> res;
+    for (int i = 0; i < n && !temp.empty(); ++i) {
+        res.push_back(temp.pop());
     }
-    return result;
+    return res;
 }
 
 template class MaxHeap<TutorScore>;

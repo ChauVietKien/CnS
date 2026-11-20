@@ -10,7 +10,7 @@ private:
         K key;
         V value;
         HashNode* next;
-        HashNode(const K& k, const V& v);
+        HashNode(const K& k, const V& v) : key(k), value(v), next(nullptr) {}
     };
 
     std::vector<HashNode*> table;

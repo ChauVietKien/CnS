@@ -1,5 +1,6 @@
-1|2|1|5|Thầy Kiên dạy Toán và Lập trình cực kỳ dễ hiểu, tận tâm chỉ dẫn từng bài tập khó!|2026-11-01 10:00
-2|2|4|5|Cô Phương Mai sửa bài Writing và Speaking rất chi tiết, phản xạ nói của mình tăng rõ rệt.|2026-11-03 14:30
-3|2|5|5|Thầy Nam dạy Vật lý đi từ bản chất hiện tượng nên nhớ bài rất lâu, không cần học vẹt công thức.|2026-11-05 09:15
-4|2|6|5|Cô Bảo Ngọc hướng dẫn cách lập dàn ý văn nghị luận sắc bén, bài viết tiến bộ vượt bậc.|2026-11-07 16:00
-5|2|1|4|Khóa học chất lượng cao, bài tập sát với đề thi tuyển sinh thực tế.|2026-11-09 20:00
+1|2|1|5|Thầy Châu Khải Phong dạy Toán và Cấu trúc dữ liệu cực kỳ dễ hiểu, phương pháp giải tối ưu và tận tâm chỉ dẫn từng bài tập khó!|2026-11-01 10:00
+2|2|4|5|Cô Phương Mai sửa bài Writing và Speaking rất chi tiết, phản xạ nói của mình tăng rõ rệt sau 1 tháng theo học.|2026-11-03 14:30
+3|7|5|5|Thầy Nam dạy Vật lý đi từ bản chất hiện tượng nên nhớ bài rất lâu, không cần học vẹt công thức máy móc.|2026-11-05 09:15
+4|7|6|5|Cô Bảo Ngọc hướng dẫn cách lập dàn ý văn nghị luận sắc bén, bài viết tiến bộ vượt bậc và đạt điểm cao trên lớp.|2026-11-07 16:00
+5|2|1|5|Khóa thuật toán của thầy Phong rất thực tế, củng cố vững chắc nền tảng giải thuật phục vụ phỏng vấn tuyển dụng.|2026-11-09 20:00
+6|7|8|5|Anh Đăng Khoa dạy Python rất trực quan, code thực chiến từng bài tập giúp người mới bắt đầu tiến bộ nhanh chóng.|2026-11-12 11:00

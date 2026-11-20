@@ -6,21 +6,21 @@
 template <typename T>
 class Set {
 private:
-    struct BSTNode {
+    struct Node {
         T data;
-        BSTNode* left;
-        BSTNode* right;
-        BSTNode(const T& val);
+        Node* left;
+        Node* right;
+        Node(const T& val) : data(val), left(nullptr), right(nullptr) {}
     };
 
-    BSTNode* root;
+    Node* root;
     int count;
 
-    BSTNode* copyTree(BSTNode* node);
-    bool insertHelper(BSTNode*& node, const T& val);
-    bool containsHelper(BSTNode* node, const T& val) const;
-    void toVectorHelper(BSTNode* node, std::vector<T>& res) const;
-    void destroyTree(BSTNode* node);
+    Node* copyTree(Node* node);
+    bool insertHelper(Node*& node, const T& val);
+    bool containsHelper(Node* node, const T& val) const;
+    void toVectorHelper(Node* node, std::vector<T>& res) const;
+    void destroyTree(Node* node);
 
 public:
     Set();
